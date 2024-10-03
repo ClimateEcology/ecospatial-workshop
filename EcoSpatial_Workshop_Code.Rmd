@@ -9,6 +9,11 @@ output:
     number_sections: true
 ---
 
+#Notes
+
+* how much background do we want to provide? 
+    + ex do we need to explain what a raster is?
+
 
 ## Workshop Outline {-}
 This workshop is designed to introduce users to the new beeshiny R shiny application. 
@@ -23,7 +28,7 @@ beeshiny allows users to extract:
 
 ### Load packages
 There are a number of packages in R that are helpful in working with spatial data. For this workshop we will be using [sf](https://r-spatial.github.io/sf/) and [terra](https://rspatial.org/index.html). 
-For data wrangling and visualizations we will use `dplyr` and `ggplot2` respectively. 
+For data wrangling and visualizations we will use `dplyr`, `ggplot2` and `tidyterra`. 
 
 Because some spatial functions have the same names as dplyr functions it is helpful to load the spatial packages last. We can also use the `::` to specify the package for function calls. 
 
@@ -33,8 +38,10 @@ library(dplyr)
 library(ggplot2)
 #install.packages("sf", dependencies = TRUE)
 #install.packages("terra", dependencies = TRUE)
+#install.packages("tidyterra", dependencies = TRUE)
 library(sf)
 library(terra)
+library(tidyterra)
 ```
 
 
@@ -43,16 +50,50 @@ Use beeshiny to download a CDL raster for any county in the US you would like fo
 
 ## Working with raster data in R
 
-Downloaded data from beeshiny is packaged as a zipped file called data.zip. Inside this file yYou should now have a .tif file. The name indicates the data type, in this case CDL, the year and the FIPS code that corresponds to the county you selected. 
+Downloaded data from beeshiny is packaged as a zipped file called data.zip. Inside this file you should have a .tif file. The name indicates the data type, in this case CDL, the year and the FIPS code that corresponds to the county you selected. 
 
 Move the .tif file into the /data folder in your ecospatial-workshop directory
 
-The first thing we will do is read 
+The first thing we will do is use the `rast()` function to read the .tif file into R as a SpatRaster. NOTE: your CDL file may have a different year and a different number after the FIPS code. 
 
+```{r create SpatRaster of cdl}
+county_cdl <- rast("data/CDL_2021_FIPS_42027.tif") # <- replace the .tif file with your file name
 
-```{r}
-
+county_cdl
 ```
+
+
+Using the `values()` function we can inspect the values of the CDL for your county 
+```{r inspect cdl, warning=FALSE}
+summary(values(county_cdl))
+```
+and look at the first few values
+```{r inspect values}
+values(county_cdl)[1:20]
+```
+ However, while the CDL Class Names are stored as values these have no numeric meaning. They simply correspond to a land cover class. 
+ 
+ #TODO: convert to CDL class values from lookup table
+
+An important attribute of spatial data are their Coordinate Reference System or CRS. This information tells us what model of the earth (ex WGS84 or NAD83) is being referenced as well as the units of the coordinates such as decimal degrees. 
+
+Rasters downloaded from beeshiny inherit their CRS from the raster they were originally extracted from. 
+
+Let's view the CRS for your county cdl:
+```{r crs}
+crs(county_cdl)
+```
+We can see that our CDL raster is using the North American Datum of 1983 as it's model for the shape of the earth. Our two-dimensional projection model of earth's 3d surface is Alber's Equal Area and the units of our coordinates are in meters. 
+
+
+We can visualize 
+```{r plot}
+ggplot() +
+  geom_spatraster(data = county_cdl, aes(fill = Class_Names)) +
+  scale_fill_grass_d(palette = "rainbow", na.value="transparent")
+```
+
+
 
 ### Check your learning
 
