@@ -76,29 +76,23 @@ crs(county_cdl)
 ```
 We can see that our CDL raster is using the North American Datum of 1983 as it's model for the shape of the earth. Our two-dimensional projection model of earth's 3d surface is Alber's Equal Area and the units of our coordinates are in meters. 
 
+
 ## Visualize raster data
 We can visualize our county CDl raster using either base R plotting and terra 
 ```{r base}
 plot(county_cdl)
 ```
 
-
 or using ggplot2 and tidyterra
 ```{r ggplot}
 ggplot() +
-  geom_spatraster(data = county_cdl, aes(fill = Class_Names)) +
-  scale_fill_grass_c()
+  geom_spatraster(data = county_cdl, aes(fill = CLASS_NAME)) 
 ```
+
 
 ## Reclass raster values
 
-We can see from our plots that the CDL Class Names are stored as numeric values, these have no numeric meaning. They simply correspond to a land cover class. 
- 
-The values can be reclassified into their class names or into other values using the `classify()` function. 
-
-### Reclass to spring floral resources map
-
-We can reclassify the CDL into a map of floral resources using the values from [Koh et al. 2015](https://www.pnas.org/doi/abs/10.1073/pnas.1517685113). 
+We can reclassify the CDL raster giving it the proper land cover names and turning it into a map of floral resources using the values from [Koh et al. 2015](https://www.pnas.org/doi/abs/10.1073/pnas.1517685113). 
 
 The table contains each CDL value, it's corresponding class name and the values for several indices. 
 
@@ -106,6 +100,37 @@ The table contains each CDL value, it's corresponding class name and the values 
 reclass_table <- read.csv("data/cdl_reclass_koh.csv")
 head(reclass_table)
 ```
+
+
+We can see from our plots that the CDL Class Names are stored as numeric values, these have no numeric meaning. They simply correspond to a land cover class. 
+ 
+The values can be reclassified into their class names or into other values using the `classify()` function. 
+
+
+### Reclass to named CDL classes
+
+We can also reclassify the CDL to show it's land class names rather than the values. In this case we will use a different work flow by modifying the levels. 
+
+First we set the levels of the raster to the land cover class names using the first two columns of our reclass table
+```{r relevel}
+levels(county_cdl) <- as.data.frame(reclass_table[,1:2])
+```
+
+Then we can even recolor the classes to match the traditional NASS CDL style.
+
+First, we will load in a file with which describes the color values associated with each CDL value.
+```{r load colormap}
+cdl_colormap <- read.csv("data/cdl_colormap.csv")
+```
+
+Then we can assign the color values to their corresponding levels in the raster and view a plot to check it out. 
+```{r }
+terra::coltab(county_cdl) <- as.data.frame(cdl_colormap)
+plot(county_cdl)
+```
+
+
+### Reclass to spring floral resources map
 
 We will select just the columns corresponding to the CDL value and the spring floral resources to reclassify our county CDL and generate a map of spring floral resources across the county
 ```{r reclass to forage}
@@ -116,49 +141,21 @@ county_floral_sp <- classify(county_cdl,
 plot(county_floral_sp)
 ```
 
-### Inspect raster values
+## Inspect raster values
 
-Using the `values()` function we can inspect the distribution of spring floral values for your county 
+Using the `values()` function we can inspect the distribution of spring floral values for your county. We will set the `na.rm=TRUE` argument so that all the cells outside of the county are not included
 ```{r inspect cdl, warning=FALSE}
-summary(values(county_floral_sp))
-hist(values(county_floral_sp))
+summary(values(county_floral_sp, na.rm=TRUE))
+hist(values(county_floral_sp, na.rm=TRUE))
 ```
+
 and look at at individual grid cell values. 
 ```{r inspect values}
-values(county_floral_sp)[1:20]
+values(county_floral_sp, na.rm=TRUE)[1:20]
 ```
 
-### Reclass to named CDL classes
 
-We can also reclassify the CDL to show it's land class names rather than the values. In this case we will use a differnt work flow by turing out raster into a categorical raster and then modifying the levels. 
 
-First we will make our county raster categorical
-```{r factor raster}
-county_cdl_f <- as.factor(county_cdl)
-```
-
-Then we will get the current value labels using the `levels` function 
-```{r get levels}
-county_levels <- as.data.frame(levels(county_cdl_f))
-```
-
-We will change our reclass table values to characters before merging them with a `left_join()` and replacing the old label column
-```{r}
-reclass_table_f <- reclass_table[,c("Class_Names","CLASS_NAME")] %>% mutate(Class_Names=as.character(Class_Names))
-
-new_county_levels <- left_join(county_levels,reclass_table_f) %>% 
-  mutate(Class_Names=CLASS_NAME) %>% 
-  select(-CLASS_NAME)
-
-```
-
-Finally, we will replace the old levels scheme with the new one
-```{r}
-levels(county_cdl_f) <- new_county_levels
-
-plot(county_cdl_f)
-```
- 
 ## Check your learning
 
 1. Use beeshiny to download the CDL raster for Centre County Pa for any year you want
@@ -168,22 +165,16 @@ plot(county_cdl_f)
 3. Read the raster into R as a terra SpatRaster
 
 4. Replace the CDL value codes with the land cover class names
-
 ```{r check learning raster, class.source = 'fold-hide', message=FALSE}
 centre_cdl <- rast("data/CDL_2021_FIPS_42027.tif") 
 
 #OR if beeshiny not working:
 
 centre_cdl <- rast("data/backups/pa_centre_cdl_2021.tif") 
-centre_cdl_f <- as.factor(centre_cdl)
-centre_levels <- as.data.frame(levels(centre_cdl_f))
-reclass_table_f <- reclass_table[,c("Class_Names","CLASS_NAME")] %>% mutate(Class_Names=as.character(Class_Names))
-new_centre_levels <- left_join(centre_levels,reclass_table_f) %>% 
-  mutate(Class_Names=CLASS_NAME) %>% 
-  select(-CLASS_NAME)
-levels(centre_cdl_f) <- new_centre_levels
+levels(centre_cdl) <- as.data.frame(reclass_table[,1:2])
+terra::coltab(centre_cdl) <- as.data.frame(cdl_colormap)
+#plot(centre_cdl)
 
-levels(centre_cdl_f) <- reclass_table[,c("Class_Names","CLASS_NAME")]
 ```
 
 
@@ -192,17 +183,28 @@ levels(centre_cdl_f) <- reclass_table[,c("Class_Names","CLASS_NAME")]
 
 ## Read in point data
 
-
-
 ```{r}
 centre_sites <- read.csv("data/centre_co_pts.csv")
-centre_sites <- st_as_sf(coords=c("x_col_name","y_col_name")
+centre_sites <- st_as_sf(centre_sites, coords=c("Long","Lat"))
 ```
 
+## Visualize point data
+```{r}
+
+```
+
+## Buffer around points
+
+```{r}
+
+```
+
+## Extract CDL values within buffers
+```{r}
+
+```
 
 # Working with climate data
-
-
 
 ```{r}
 
