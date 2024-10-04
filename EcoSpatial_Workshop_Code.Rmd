@@ -7,6 +7,9 @@ output:
     toc: true
     toc_float: true
     number_sections: true
+    code_folding: show
+editor_options: 
+  chunk_output_type: console
 ---
 
 #Notes
@@ -104,7 +107,7 @@ Using the `values()` function we can inspect the values of the CDL for your coun
 ```{r inspect cdl, warning=FALSE}
 summary(values(county_cdl))
 ```
-and look at the first few values
+and look at at individual grid cell values. The 
 ```{r inspect values}
 values(county_cdl)[1:20]
 ```
@@ -113,14 +116,18 @@ values(county_cdl)[1:20]
 
 ### Check your learning
 
-Use beeshiny to download the CDL raster for Centre County Pa for any year you want
+1. Use beeshiny to download the CDL raster for Centre County Pa for any year you want
 
-Move the CDL raster for Centre County to the /data folder in your ecospatial-workshop directory
+2. Move the CDL raster for Centre County to the /data folder in your ecospatial-workshop directory
 
-Read the raster into R as a terra
+3. Read the raster into R as a terra SpatRaster
 
-```{r}
+```{r check learning raster, class.source = 'fold-hide'}
+centre_cdl <- rast("data/CDL_2021_FIPS_42027.tif") 
 
+#OR if beeshiny not working:
+
+centre_cdl <- rast("data/backups/pa_centre_cdl_2021.tif") 
 ```
 
 
