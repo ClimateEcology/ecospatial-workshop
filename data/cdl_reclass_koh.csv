@@ -1,4 +1,4 @@
-lucode,CLASS_NAME,nesting_ground_availability_index,nesting_cavity_availability_index,nesting_stem_availability_index,nesting_wood_availability_index,floral_resources_spring_index,floral_resources_summer_index,floral_resources_fall_index
+Class_Names,CLASS_NAME,nesting_ground_availability_index,nesting_cavity_availability_index,nesting_stem_availability_index,nesting_wood_availability_index,floral_resources_spring_index,floral_resources_summer_index,floral_resources_fall_index
 0,Background,0,0,0,0,0,0,0
 1,Corn,0.14518538,0.08947642,0.10694374,0.10261136,0.09025383,0.27470743,0.13230948
 2,Cotton,0.33558978,0.22867787,0.23352933,0.27744418,0.39644857,0.31604149,0.16558153
