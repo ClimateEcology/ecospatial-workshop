@@ -87,6 +87,19 @@ ggplot() +
   geom_spatraster(data = county_cdl, aes(fill = Class_Names)) +
   scale_fill_grass_c()
 ```
+### Reclass raster values
+
+We can see from our plots that the CDL Class Names are stored as numeric values, these have no numeric meaning. They simply correspond to a land cover class. 
+ 
+The values can be easily reclassified into their class names or into other values using the `classify()` function. 
+
+```{r reclass to forage}
+
+```
+
+
+### Inspect raster values
+
 Using the `values()` function we can inspect the values of the CDL for your county 
 ```{r inspect cdl, warning=FALSE}
 summary(values(county_cdl))
@@ -95,9 +108,7 @@ and look at the first few values
 ```{r inspect values}
 values(county_cdl)[1:20]
 ```
-However, while the CDL Class Names are stored as numeric values, these have no numeric meaning. They simply correspond to a land cover class. 
- 
-The values can be easily reclassified into their class names or into other values using the `classify()` function. 
+
 
 
 ### Check your learning
