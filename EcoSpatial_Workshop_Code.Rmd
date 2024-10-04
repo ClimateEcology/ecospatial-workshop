@@ -18,7 +18,7 @@ editor_options:
     + ex do we need to explain what a raster is?
 
 
-## Workshop Outline {-}
+# Workshop Outline {-}
 This workshop is designed to introduce users to the new beeshiny R shiny application. 
 
 beeshiny can be used to query data commonly used when modeling the environemental drivers of species' or commmunity responses. beeshiny was originally build as a companion to [Beescape](https://beescape.psu.edu/). 
@@ -29,7 +29,7 @@ beeshiny allows users to extract:
 * crop land covers: from the NASS CropLand Data Layer
 * beescape indices: spring forage, summer forage, fall forage, nesting, and pesticides
 
-### Load packages
+## Load packages {-}
 There are a number of packages in R that are helpful in working with spatial data. For this workshop we will be using [sf](https://r-spatial.github.io/sf/) and [terra](https://rspatial.org/index.html). 
 For data wrangling and visualizations we will use `dplyr`, `ggplot2` and `tidyterra`. 
 
@@ -48,12 +48,12 @@ library(tidyterra)
 ```
 
 
-## Get raster data from beeshiny
+# Get raster data from beeshiny
 Use beeshiny to download a CDL raster for any county in the US you would like for any year you want
 
 ## Working with raster data in R
 
-### Read in raster data
+## Read in raster data
 
 Downloaded data from beeshiny is packaged as a zipped file called data.zip. Inside this file you should have a .tif file. The name indicates the data type, in this case CDL, the year and the FIPS code that corresponds to the county you selected. 
 
@@ -77,7 +77,7 @@ crs(county_cdl)
 ```
 We can see that our CDL raster is using the North American Datum of 1983 as it's model for the shape of the earth. Our two-dimensional projection model of earth's 3d surface is Alber's Equal Area and the units of our coordinates are in meters. 
 
-### Visualize raster data
+## Visualize raster data
 We can visualize our county CDl raster using either base R plotting and terra 
 ```{r base}
 plot(county_cdl)
@@ -90,31 +90,47 @@ ggplot() +
   geom_spatraster(data = county_cdl, aes(fill = Class_Names)) +
   scale_fill_grass_c()
 ```
-### Reclass raster values
+## Reclass raster values
 
 We can see from our plots that the CDL Class Names are stored as numeric values, these have no numeric meaning. They simply correspond to a land cover class. 
  
-The values can be easily reclassified into their class names or into other values using the `classify()` function. 
+The values can be reclassified into their class names or into other values using the `classify()` function. 
 
+We can reclassify the CDL into a map of floral resources using the values from [Koh et al. 2015](https://www.pnas.org/doi/abs/10.1073/pnas.1517685113). 
+
+The table contains each CDL value land use code (lucode), it's corresponding class name and the values for several indices. 
+
+```{r read in koh table}
+reclass_table <- read.csv("data/cdl_reclass_koh.csv")
+head(reclass_table)
+names(reclass_table)[1] <- "Class_Names"
+```
+
+We will select just the columns corresponding to the land use code and the spring floral resources to reclassify our county CDL and generate a map of spring floral resources across the county
 ```{r reclass to forage}
+county_floral_sp <- classify(county_cdl,reclass_table[,c("Class_Names","floral_resources_spring_index")])
 
+plot(county_floral_sp)
+
+values(county_cdl) <- as.character(values(county_cdl))
+county_cdl_r <- classify(county_cdl,reclass_table[,c("lucode","CLASS_NAME")])
 ```
 
 
-### Inspect raster values
+## Inspect raster values
 
 Using the `values()` function we can inspect the values of the CDL for your county 
 ```{r inspect cdl, warning=FALSE}
-summary(values(county_cdl))
+summary(values(county_floral_sp))
 ```
 and look at at individual grid cell values. The 
 ```{r inspect values}
-values(county_cdl)[1:20]
+values(county_floral_sp)[1:20]
 ```
 
 
 
-### Check your learning
+## Check your learning
 
 1. Use beeshiny to download the CDL raster for Centre County Pa for any year you want
 
@@ -132,7 +148,7 @@ centre_cdl <- rast("data/backups/pa_centre_cdl_2021.tif")
 
 
 
-## Working with point data
+# Working with point data
 
 
 
@@ -141,7 +157,7 @@ centre_cdl <- rast("data/backups/pa_centre_cdl_2021.tif")
 ```
 
 
-## Working with climate data
+# Working with climate data
 
 
 
