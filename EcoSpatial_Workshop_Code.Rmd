@@ -17,7 +17,6 @@ editor_options:
 * how much background do we want to provide? 
     + ex do we need to explain what a raster is?
 
-
 # Workshop Outline {-}
 This workshop is designed to introduce users to the new beeshiny R shiny application. 
 
@@ -183,6 +182,8 @@ new_centre_levels <- left_join(centre_levels,reclass_table_f) %>%
   mutate(Class_Names=CLASS_NAME) %>% 
   select(-CLASS_NAME)
 levels(centre_cdl_f) <- new_centre_levels
+
+levels(centre_cdl_f) <- reclass_table[,c("Class_Names","CLASS_NAME")]
 ```
 
 
@@ -191,8 +192,11 @@ levels(centre_cdl_f) <- new_centre_levels
 
 ## Read in point data
 
-```{r}
 
+
+```{r}
+centre_sites <- read.csv("data/centre_co_pts.csv")
+centre_sites <- st_as_sf(coords=c("x_col_name","y_col_name")
 ```
 
 
