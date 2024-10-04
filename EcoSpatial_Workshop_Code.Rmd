@@ -50,6 +50,8 @@ Use beeshiny to download a CDL raster for any county in the US you would like fo
 
 ## Working with raster data in R
 
+### Read in raster data
+
 Downloaded data from beeshiny is packaged as a zipped file called data.zip. Inside this file you should have a .tif file. The name indicates the data type, in this case CDL, the year and the FIPS code that corresponds to the county you selected. 
 
 Move the .tif file into the /data folder in your ecospatial-workshop directory
@@ -61,20 +63,7 @@ county_cdl <- rast("data/CDL_2021_FIPS_42027.tif") # <- replace the .tif file wi
 
 county_cdl
 ```
-
-
-Using the `values()` function we can inspect the values of the CDL for your county 
-```{r inspect cdl, warning=FALSE}
-summary(values(county_cdl))
-```
-and look at the first few values
-```{r inspect values}
-values(county_cdl)[1:20]
-```
- However, while the CDL Class Names are stored as values these have no numeric meaning. They simply correspond to a land cover class. 
  
- #TODO: convert to CDL class values from lookup table
-
 An important attribute of spatial data are their Coordinate Reference System or CRS. This information tells us what model of the earth (ex WGS84 or NAD83) is being referenced as well as the units of the coordinates such as decimal degrees. 
 
 Rasters downloaded from beeshiny inherit their CRS from the raster they were originally extracted from. 
@@ -85,14 +74,30 @@ crs(county_cdl)
 ```
 We can see that our CDL raster is using the North American Datum of 1983 as it's model for the shape of the earth. Our two-dimensional projection model of earth's 3d surface is Alber's Equal Area and the units of our coordinates are in meters. 
 
-
-We can visualize 
-```{r plot}
-ggplot() +
-  geom_spatraster(data = county_cdl, aes(fill = Class_Names)) +
-  scale_fill_grass_d(palette = "rainbow", na.value="transparent")
+### Visualize raster data
+We can visualize our county CDl raster using either base R plotting and terra 
+```{r base}
+plot(county_cdl)
 ```
 
+
+or using ggplot2 and tidyterra
+```{r ggplot}
+ggplot() +
+  geom_spatraster(data = county_cdl, aes(fill = Class_Names)) +
+  scale_fill_grass_c()
+```
+Using the `values()` function we can inspect the values of the CDL for your county 
+```{r inspect cdl, warning=FALSE}
+summary(values(county_cdl))
+```
+and look at the first few values
+```{r inspect values}
+values(county_cdl)[1:20]
+```
+However, while the CDL Class Names are stored as numeric values, these have no numeric meaning. They simply correspond to a land cover class. 
+ 
+The values can be easily reclassified into their class names or into other values using the `classify()` function. 
 
 
 ### Check your learning
