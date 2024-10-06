@@ -1,41 +1,61 @@
 ---
-title: "EcoSpatial Workshop"
-author: "Heather Grab, Kevin Li, Sarah Goslee"
-date: "2024-10-03"
-output: 
-  html_document:
-    toc: true
-    toc_float: true
-    number_sections: true
-    code_folding: show
-editor_options: 
-  chunk_output_type: console
+output: github_document
 ---
 
-# Notes
+<!-- README.md is generated from README.Rmd. Please edit that file -->
 
-* how much background do we want to provide? 
-    + ex do we need to explain what a raster is?
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  warning = FALSE, 
+  message = FALSE
+)
+```
 
+# EcoSpatial Summit Workshop
 
-# Workshop Outline {-}
-This workshop is designed to introduce users to the new beeshiny R shiny application. 
+This workshop is designed to introduce users to the new [**beeshiny**](https://beesuite.psu.edu/beeshiny/) R shiny application. 
 
-beeshiny can be used to query data commonly used when modeling the environemental drivers of species' or commmunity responses. beeshiny was originally build as a companion to [Beescape](https://beescape.psu.edu/). 
+[**beeshiny**](https://beesuite.psu.edu/beeshiny/) can be used to query data commonly used when modeling the environemental drivers of species' or commmunity responses. beeshiny was originally build as a companion to [Beescape](https://beescape.psu.edu/). 
 
-beeshiny allows users to extract:
+**beeshiny** allows users to extract:
 
 * climate data: monthly precipitation, min, and max temperature from PRISM
 * crop land covers: from the NASS CropLand Data Layer
 * beescape indices: spring forage, summer forage, fall forage, nesting, and pesticides
 
-## Load packages {-}
+*Packages:*
+
+| Name | Description | Link |
+|:--|:--|:--|
+| `dplyr` | Package that provides a 'grammar' of data manipulation in `R` | https://dplyr.tidyverse.org/ |
+| `ggplot2` | Package that provides a system for declaratively creating graphics | https://ggplot2.tidyverse.org/ |
+| `sf` | Package for manipulating 2-D geographic vector data | https://r-spatial.github.io/sf/ |
+| `terra` | Package for spatial data analysis | https://rspatial.github.io/terra/ |
+| `tidyterra` | Package for integrating objects from `terra` with the `dplyr` and `ggplot2` packages | https://dieghernan.github.io/tidyterra/ |
+
+## Nomenclature
+
+* *raster:* A form of geographic data that represents the landscape as a grid of cells. Grid values can be continuous values, signifying things like elevation, temperature, or spectral information (e.g. color) in a satellite image; or categorical values, signifying thematic classes like land cover.
+* *vector:* Another form of geographic data that represents specific features on the landscape composed of discrete geometric locations that consist of x and y values. These can be points, lines, or polygons.
+* *Cropland Data Layer (CDL):* A set of raster datasets produced by the USDA Nationa Agricultural Statistics (NASS) Service and Agricultural Research Service (ARS) that represents annual crop-specific land cover produced from satellite imagery and ground reference data.
+
+## Data Details
+
+We will use data downloaded from the [**beeshiny app**](https://beesuite.psu.edu/beeshiny/), along with point data representing hypothetical sites in Centre County, PA, which can be downloaded from this repository in the `/data`` folder.
+
+ * *Note that if you are unable to access the data on beeshiny, backup data are available in the repository in* `data/backups`
+
+## Load packages
+
 There are a number of packages in R that are helpful in working with spatial data. For this workshop we will be using [sf](https://r-spatial.github.io/sf/) and [terra](https://rspatial.org/index.html). 
 For data wrangling and visualizations we will use `dplyr`, `ggplot2` and `tidyterra`. 
 
 Because some spatial functions have the same names as dplyr functions it is helpful to load the spatial packages last. We can also use the `::` to specify the package for function calls. 
 
 Unhash and use install.packages for any packages your may not already have installed
+
 ```{r packages, echo=TRUE, results='hide', message=FALSE}
 library(dplyr)
 library(ggplot2)
@@ -47,8 +67,8 @@ library(terra)
 library(tidyterra)
 ```
 
-
 # Get raster data from beeshiny
+
 Use beeshiny to download a CDL raster for any county in the US you would like for any year you want
 
 ## Working with raster data in R
@@ -62,9 +82,11 @@ Move the .tif file into the /data folder in your ecospatial-workshop directory
 The first thing we will do is use the `rast()` function to read the .tif file into R as a SpatRaster. NOTE: your CDL file may have a different year and a different number after the FIPS code. 
 
 ```{r create SpatRaster of cdl}
-county_cdl <- rast("data/CDL_2021_FIPS_42027.tif") # <- replace the .tif file with your file name
+
+county_cdl <- rast("data/backups/pa_centre_cdl_2021.tif") # <- replace the .tif file with your file name
 
 county_cdl
+
 ```
  
 An important attribute of spatial data are their Coordinate Reference System or CRS. This information tells us what model of the earth (ex WGS84 or NAD83) is being referenced as well as the units of the coordinates such as decimal degrees. 
@@ -171,7 +193,7 @@ plot(county_cdl_f)
 4. Replace the CDL value codes with the land cover class names
 
 ```{r check learning raster, class.source = 'fold-hide', message=FALSE}
-centre_cdl <- rast("data/CDL_2021_FIPS_42027.tif") 
+centre_cdl <- rast("data/backups/pa_centre_cdl_2021.tif") 
 
 #OR if beeshiny not working:
 
