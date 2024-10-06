@@ -19,17 +19,7 @@ or commmunity responses. beeshiny was originally build as a companion to
 - beescape indices: spring forage, summer forage, fall forage, nesting,
   and pesticides
 
-*Packages:*
-
-| Name | Description | Link |
-|:---|:---|:---|
-| `dplyr` | Package that provides a ‘grammar’ of data manipulation in `R` | <https://dplyr.tidyverse.org/> |
-| `ggplot2` | Package that provides a system for declaratively creating graphics | <https://ggplot2.tidyverse.org/> |
-| `sf` | Package for manipulating 2-D geographic vector data | <https://r-spatial.github.io/sf/> |
-| `terra` | Package for spatial data analysis | <https://rspatial.github.io/terra/> |
-| `tidyterra` | Package for integrating objects from `terra` with the `dplyr` and `ggplot2` packages | <https://dieghernan.github.io/tidyterra/> |
-
-## Nomenclature
+### Nomenclature
 
 - *raster:* A form of geographic data that represents the landscape as a
   grid of cells. Grid values can be continuous values, signifying things
@@ -45,7 +35,7 @@ or commmunity responses. beeshiny was originally build as a companion to
   Research Service (ARS) that represents annual crop-specific land cover
   produced from satellite imagery and ground reference data.
 
-## Data Details
+### Data Details
 
 We will use data downloaded from the [**beeshiny
 app**](https://beesuite.psu.edu/beeshiny/), along with point data
@@ -55,7 +45,17 @@ downloaded from this repository in the \`/data\`\` folder.
 - *Note that if you are unable to access the data on beeshiny, backup
   data are available in the repository in* `data/backups`
 
-## Load packages
+## Packages
+
+| Name | Description | Link |
+|:---|:---|:---|
+| `dplyr` | Package that provides a ‘grammar’ of data manipulation in `R` | <https://dplyr.tidyverse.org/> |
+| `ggplot2` | Package that provides a system for declaratively creating graphics | <https://ggplot2.tidyverse.org/> |
+| `sf` | Package for manipulating 2-D geographic vector data | <https://r-spatial.github.io/sf/> |
+| `terra` | Package for spatial data analysis | <https://rspatial.github.io/terra/> |
+| `tidyterra` | Package for integrating objects from `terra` with the `dplyr` and `ggplot2` packages | <https://dieghernan.github.io/tidyterra/> |
+
+### Load packages
 
 There are a number of packages in R that are helpful in working with
 spatial data. For this workshop we will be using
@@ -81,7 +81,7 @@ library(terra)
 library(tidyterra)
 ```
 
-# Get raster data from beeshiny
+## Get raster data from beeshiny
 
 Use beeshiny to download a CDL raster for any county in the US you would
 like for any year you want

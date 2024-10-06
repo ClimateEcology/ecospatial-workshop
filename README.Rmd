@@ -25,7 +25,19 @@ This workshop is designed to introduce users to the new [**beeshiny**](https://b
 * crop land covers: from the NASS CropLand Data Layer
 * beescape indices: spring forage, summer forage, fall forage, nesting, and pesticides
 
-*Packages:*
+### Nomenclature
+
+* *raster:* A form of geographic data that represents the landscape as a grid of cells. Grid values can be continuous values, signifying things like elevation, temperature, or spectral information (e.g. color) in a satellite image; or categorical values, signifying thematic classes like land cover.
+* *vector:* Another form of geographic data that represents specific features on the landscape composed of discrete geometric locations that consist of x and y values. These can be points, lines, or polygons.
+* *Cropland Data Layer (CDL):* A set of raster datasets produced by the USDA Nationa Agricultural Statistics (NASS) Service and Agricultural Research Service (ARS) that represents annual crop-specific land cover produced from satellite imagery and ground reference data.
+
+### Data Details
+
+We will use data downloaded from the [**beeshiny app**](https://beesuite.psu.edu/beeshiny/), along with point data representing hypothetical sites in Centre County, PA, which can be downloaded from this repository in the `/data`` folder.
+
+ * *Note that if you are unable to access the data on beeshiny, backup data are available in the repository in* `data/backups`
+
+## Packages
 
 | Name | Description | Link |
 |:--|:--|:--|
@@ -35,19 +47,7 @@ This workshop is designed to introduce users to the new [**beeshiny**](https://b
 | `terra` | Package for spatial data analysis | https://rspatial.github.io/terra/ |
 | `tidyterra` | Package for integrating objects from `terra` with the `dplyr` and `ggplot2` packages | https://dieghernan.github.io/tidyterra/ |
 
-## Nomenclature
-
-* *raster:* A form of geographic data that represents the landscape as a grid of cells. Grid values can be continuous values, signifying things like elevation, temperature, or spectral information (e.g. color) in a satellite image; or categorical values, signifying thematic classes like land cover.
-* *vector:* Another form of geographic data that represents specific features on the landscape composed of discrete geometric locations that consist of x and y values. These can be points, lines, or polygons.
-* *Cropland Data Layer (CDL):* A set of raster datasets produced by the USDA Nationa Agricultural Statistics (NASS) Service and Agricultural Research Service (ARS) that represents annual crop-specific land cover produced from satellite imagery and ground reference data.
-
-## Data Details
-
-We will use data downloaded from the [**beeshiny app**](https://beesuite.psu.edu/beeshiny/), along with point data representing hypothetical sites in Centre County, PA, which can be downloaded from this repository in the `/data`` folder.
-
- * *Note that if you are unable to access the data on beeshiny, backup data are available in the repository in* `data/backups`
-
-## Load packages
+### Load packages
 
 There are a number of packages in R that are helpful in working with spatial data. For this workshop we will be using [sf](https://r-spatial.github.io/sf/) and [terra](https://rspatial.org/index.html). 
 For data wrangling and visualizations we will use `dplyr`, `ggplot2` and `tidyterra`. 
@@ -67,7 +67,7 @@ library(terra)
 library(tidyterra)
 ```
 
-# Get raster data from beeshiny
+## Get raster data from beeshiny
 
 Use beeshiny to download a CDL raster for any county in the US you would like for any year you want
 
