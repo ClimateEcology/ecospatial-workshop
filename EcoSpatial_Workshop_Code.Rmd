@@ -86,7 +86,7 @@ plot(county_cdl)
 or using ggplot2 and tidyterra
 ```{r ggplot}
 ggplot() +
-  geom_spatraster(data = county_cdl, aes(fill = CLASS_NAME)) 
+  geom_spatraster(data = county_cdl, aes(fill = Class_Names)) 
 ```
 
 
@@ -121,12 +121,26 @@ Then we can even recolor the classes to match the traditional NASS CDL style.
 First, we will load in a file with which describes the color values associated with each CDL value.
 ```{r load colormap}
 cdl_colormap <- read.csv("data/cdl_colormap.csv")
+cdl_colormap
 ```
 
 Then we can assign the color values to their corresponding levels in the raster and view a plot to check it out. 
 ```{r }
-terra::coltab(county_cdl) <- as.data.frame(cdl_colormap)
-plot(county_cdl)
+terra::coltab(county_cdl) <- cdl_colormap
+
+ggplot() +
+  geom_spatraster(data = county_cdl, aes(fill = CLASS_NAME))
+
+```
+
+The legend is now quite large but can be easily modified using ggplot2 themes functions
+```{r}
+ggplot() +
+  geom_spatraster(data = county_cdl, aes(fill = CLASS_NAME)) +
+  theme(legend.title = element_text(size = 7), 
+        legend.text = element_text(size = 7), 
+        legend.key.size = unit(0.25, 'cm'),
+        legend.position="bottom") 
 ```
 
 
@@ -149,7 +163,7 @@ summary(values(county_floral_sp, na.rm=TRUE))
 hist(values(county_floral_sp, na.rm=TRUE))
 ```
 
-and look at at individual grid cell values. 
+and look at at individual grid cell values. In this case we, will only extract the first 20 grid cell values.
 ```{r inspect values}
 values(county_floral_sp, na.rm=TRUE)[1:20]
 ```
@@ -183,26 +197,60 @@ terra::coltab(centre_cdl) <- as.data.frame(cdl_colormap)
 
 ## Read in point data
 
-```{r}
+```{r read in pts}
 centre_sites <- read.csv("data/centre_co_pts.csv")
-centre_sites <- st_as_sf(centre_sites, coords=c("Long","Lat"))
+centre_sites <- st_as_sf(centre_sites, coords=c("Long","Lat"), 
+                         crs = 4326) #set the crs
+centre_sites
 ```
+
 
 ## Visualize point data
 ```{r}
-
+ggplot()+
+  geom_spatraster(data = centre_cdl, aes(fill = CLASS_NAME)) +
+  geom_sf(data=centre_sites) + 
+  theme(legend.title = element_text(size = 7), 
+        legend.text = element_text(size = 7), 
+        legend.key.size = unit(0.25, 'cm'),
+        legend.position="bottom") 
 ```
 
 ## Buffer around points
 
 ```{r}
-
+centre_sites_1000m <- st_buffer(centre_sites, 1000)
 ```
+
+```{r}
+ggplot()+
+  geom_spatraster(data = centre_cdl, aes(fill = CLASS_NAME)) +
+  geom_sf(data = centre_sites_1000m)+
+  geom_sf(data=centre_sites) + 
+  theme(legend.title = element_text(size = 7), 
+        legend.text = element_text(size = 7), 
+        legend.key.size = unit(0.25, 'cm'),
+        legend.position="bottom") 
+```
+
 
 ## Extract CDL values within buffers
 ```{r}
-
+centre_table_1000m <- extract(centre_cdl, centre_sites_1000m, fun="table", ID=F)
+centre_table_1000m
 ```
+
+```{r}
+Area_m2 <- rowSums(centre_table_1000m)*900
+centre_table_1000m_prop <- centre_table_1000m/rowSums(centre_table_1000m)
+
+centre_table_1000m_prop <- cbind(Area_m2,centre_table_1000m_prop)
+```
+
+
+## Check your learning
+
+1. Using beeshiny, extract the CDL values for 1km around the centre county points for the same year of the CDL that you used in the last activity. 
 
 # Working with climate data
 
