@@ -202,13 +202,13 @@ values(county_floral_sp, na.rm=TRUE)[1:20]
 
 ## Check your learning
 
-1. Use beeshiny to download the CDL raster for Centre County Pa for any year you want (if you have already done Centre county please choose a different year)
+1. Use beeshiny to download the CDL raster for any county for any year you want 
 
-2. Move the CDL raster for Centre County to the /data folder in your ecospatial-workshop directory
+2. Move the CDL raster to the /data folder in your ecospatial-workshop directory
 
 3. Read the raster into R as a terra SpatRaster
 
-4. Replace the CDL value codes with the land cover class names
+4. Replace the CDL value codes with the land cover class names and CDL color values
 ```{r check learning raster, class.source = 'fold-hide', message=FALSE}
 centre_cdl <- rast("data/CDL_2021_FIPS_42027.tif") 
 
