@@ -254,3 +254,8 @@ centre_table_1000m_prop <- cbind(Area_m2,centre_table_1000m_prop)
 
 ```
 
+# Bringing it all together
+```{r}
+
+```
+
