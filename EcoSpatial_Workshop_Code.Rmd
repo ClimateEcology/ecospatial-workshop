@@ -165,10 +165,10 @@ The legend is now quite large but can be easily modified using ggplot2 themes fu
 ```{r}
 ggplot() +
   geom_spatraster(data = county_cdl, aes(fill = CLASS_NAME)) +
-  theme(legend.title = element_text(size = 7), 
-        legend.text = element_text(size = 7), 
-        legend.key.size = unit(0.25, 'cm'),
-        legend.position="bottom") 
+  theme(legend.title = element_text(size = 7), # make legend title smaller
+        legend.text = element_text(size = 7), # make legend text smaller
+        legend.key.size = unit(0.25, 'cm'), #make legend color keys smaller
+        legend.position="bottom") # move legend to the bottom of the plot
 ```
 
 
