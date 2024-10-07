@@ -148,12 +148,12 @@ First, we will load in a file with which describes the color values associated w
 
 ```{r load colormap}
 cdl_colormap <- read.csv("data/cdl_colormap.csv")
-cdl_colormap
+head(cdl_colormap)
 ```
 
 Then we can assign the color values to their corresponding levels in the raster and view a plot to check it out. 
 ```{r }
-terra::coltab(county_cdl) <- cdl_colormap
+coltab(county_cdl) <- cdl_colormap
 
 ggplot() +
   geom_spatraster(data = county_cdl, aes(fill = CLASS_NAME))
