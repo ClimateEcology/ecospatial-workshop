@@ -202,7 +202,7 @@ values(county_floral_sp, na.rm=TRUE)[1:20]
 
 ## Check your learning
 
-1. Use beeshiny to download the CDL raster for Centre County Pa for any year you want
+1. Use beeshiny to download the CDL raster for Centre County Pa for any year you want (if you have already done Centre county please choose a different year)
 
 2. Move the CDL raster for Centre County to the /data folder in your ecospatial-workshop directory
 
