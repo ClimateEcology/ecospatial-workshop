@@ -12,10 +12,6 @@ editor_options:
   chunk_output_type: console
 ---
 
-# Notes
-
-* how much background do we want to provide? 
-    + ex do we need to explain what a raster is?
 
 # Workshop Outline {-}
 This workshop is designed to introduce users to the new beeshiny R shiny application. 
