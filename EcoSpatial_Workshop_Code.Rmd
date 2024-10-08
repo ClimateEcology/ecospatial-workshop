@@ -117,24 +117,15 @@ ggplot() +
 ```
 
 
-## Reclass raster values
-
-We can reclassify the CDL raster giving it the proper land cover names and turning it into a map of floral resources using the values from [Koh et al. 2015](https://www.pnas.org/doi/abs/10.1073/pnas.1517685113). 
-
-The table contains each CDL value, it's corresponding class name and the values for several indices. 
-
-```{r read in koh table}
-reclass_table <- read.csv("data/cdl_reclass_koh.csv")
-head(reclass_table)
-```
-
-We can see from our plots that the CDL Class Names are stored as numeric values, these have no numeric meaning. They simply correspond to a land cover class. 
- 
-The values can be reclassified into their class names or into other values using the `classify()` function. 
-
 ### Reclass to named CDL classes
 
-We can also reclassify the CDL to show it's land class names rather than the values. In this case we will use a different work flow by modifying the levels. 
+Right now we are viewing the raw numeric codes of the CDL. These codes mean something: the crop land cover class. We can tell `terra` what these codes mean so that it will show the land class names rather than the raw values. The information for these land cover values (along with their colors) are stored in the color table in `data/cdl_colormap.csv`.
+
+```{r load_coltab}
+
+cdl_colormap <- read.csv("data/cdl_colormap.csv")
+
+```
 
 First we set the levels of the raster to the land cover class names using the first two columns of our reclass table
 
@@ -171,6 +162,20 @@ ggplot() +
         legend.position="bottom") # move legend to the bottom of the plot
 ```
 
+## Reclass raster values
+
+We can reclassify the CDL raster giving it the proper land cover names and turning it into a map of floral resources using the values from [Koh et al. 2015](https://www.pnas.org/doi/abs/10.1073/pnas.1517685113). 
+
+The table contains each CDL value, its corresponding class name and the values for several indices. 
+
+```{r read in koh table}
+reclass_table <- read.csv("data/cdl_reclass_koh.csv")
+head(reclass_table)
+```
+
+We can see from our plots that the CDL Class Names are stored as numeric values, these have no numeric meaning. They simply correspond to a land cover class. 
+ 
+The values can be reclassified into their class names or into other values using the `classify()` function. 
 
 ### Reclass to spring floral resources map
 
@@ -208,7 +213,8 @@ values(county_floral_sp, na.rm=TRUE)[1:20]
 
 3. Read the raster into R as a terra SpatRaster
 
-4. Replace the CDL value codes with the land cover class names
+4. Define CDL value codes with land cover class names and assign colors using `cdl_colormap`
+
 ```{r check learning raster, class.source = 'fold-hide', message=FALSE}
 centre_cdl <- rast("data/CDL_2021_FIPS_42027.tif") 
 
