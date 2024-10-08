@@ -213,12 +213,8 @@ values(county_floral_sp, na.rm=TRUE)[1:20]
 
 3. Read the raster into R as a terra SpatRaster
 
-<<<<<<< HEAD
-4. Replace the CDL value codes with the land cover class names and CDL color values
-=======
 4. Define CDL value codes with land cover class names and assign colors using `cdl_colormap`
 
->>>>>>> aed878057c9cdcab2314cff517be2b1e58e3c5e8
 ```{r check learning raster, class.source = 'fold-hide', message=FALSE}
 centre_cdl <- rast("data/CDL_2021_FIPS_42027.tif") 
 
