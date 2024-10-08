@@ -320,6 +320,14 @@ centre_table_1000m_prop <- cbind(Area_m2,centre_table_1000m_prop)
 centre_table_1000m_prop
 ```
 
+## Write out shapefiles
+we can write out vector data to shapefiles using `st_write()`
+```{r}
+st_write(centre_sites, "data/centre_sites.shp")
+st_write(centre_sites_1000m, "data/centre_sites_buffer_1000m.shp")
+```
+
+
 
 ## Check your learning
 
