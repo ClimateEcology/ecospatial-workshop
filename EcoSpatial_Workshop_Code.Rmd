@@ -227,6 +227,9 @@ terra::coltab(centre_cdl) <- as.data.frame(cdl_colormap)
 
 ## Read in point data
 
+Often we collect and store point data as coordinates in a non-spatial format such as a csv file which we need to convert into a spatial object in R. 
+
+In the /data directory you should find a csv file with a set of points from Centre County Pa. 
 ```{r read in pts}
 centre_sites <- read.csv("data/centre_co_pts.csv")
 centre_sites
