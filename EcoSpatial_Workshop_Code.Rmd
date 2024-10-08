@@ -144,7 +144,7 @@ head(cdl_colormap)
 
 Then we can assign the color values to their corresponding levels in the raster and view a plot to check it out. 
 ```{r }
-coltab(county_cdl) <- cdl_colormap
+coltab(county_cdl) <- cdl_colormap[,1:5]
 
 ggplot() +
   geom_spatraster(data = county_cdl, aes(fill = CLASS_NAME))
@@ -183,7 +183,7 @@ We will select just the columns corresponding to the CDL value and the spring fl
 
 ```{r reclass to forage}
 county_floral_sp <- classify(county_cdl,
-                    reclass_table[,c("Class_Names",
+                    reclass_table[,c("class_name",
                                      "floral_resources_spring_index")])
 
 plot(county_floral_sp)
@@ -203,6 +203,12 @@ and look at at individual grid cell values. In this case we, will only extract t
 values(county_floral_sp, na.rm=TRUE)[1:20]
 ```
 
+## Write out raster files
+We can save our raster files as a .tif using `writeRaster`. For the CDL raster we will save the data in "INT1U" format which will also save the class names and color table. 
+```{r}
+writeRaster(county_cdl, "data/centre_county_cdl_2015.tif", overwrite=TRUE, datatype="INT1U")
+writeRaster(county_floral_sp, "data/centre_county_springfloral_2015.tif", overwrite=TRUE)
+```
 
 
 ## Check your learning
@@ -235,19 +241,33 @@ terra::coltab(centre_cdl) <- as.data.frame(cdl_colormap)
 
 Often we collect and store point data as coordinates in a non-spatial format such as a csv file which we need to convert into a spatial object in R. 
 
-In the /data directory you should find a csv file with a set of points from Centre County Pa. 
+In the /data directory you should find a csv file with a set of points from Centre County Pa. We will read in and inspect these data.
 ```{r read in pts}
 centre_sites <- read.csv("data/centre_co_pts.csv")
 centre_sites
+```
+
+and convert them into an sf spatial object. We use the `coords=` argument to indicate the columns that hold the longitude (X) and latitude (Y). We can also specify the CRS using the 'crs=' arguments and the appropriate EPSG code or other crs object. In our case we will give the EPSG code 4326 which corresponds to WGS 84, the system commonly used by Google Earth. 
+```{r make pts spatial}
 centre_sites <- st_as_sf(centre_sites, 
                          coords=c("Long","Lat"), #indicate the x and y columns
                          crs = 4326) #set the crs
+```
+
+when we inspect the center_sites object we see that there is now additional information at the top. 
+```{r inspect sf pts}
 centre_sites
 ```
 
 
 ## Visualize point data
+
+Using `ggplot2` and `sf` we can add our points to our earlier map of Centre county 
+
 ```{r}
+#Centre county CDL from raster exercise
+centre_cdl <- rast("data/centre_county_cdl_2015.tif") 
+
 ggplot()+
   geom_spatraster(data = centre_cdl, aes(fill = CLASS_NAME)) +
   geom_sf(data=centre_sites) + 
