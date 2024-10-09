@@ -209,9 +209,9 @@ hist(values(centre_floral_sp, na.rm=TRUE))       # make a basic histogram of val
 We can save our raster files as a .tif using `writeRaster`. For the CDL raster we will save the data in "INT1U" format which will also save the class names and color table. 
 
 ```{r write_raster}
-writeRaster(county_cdl, "data/centre_county_cdl_2015.tif", overwrite=TRUE, datatype="INT1U")
+writeRaster(centre_cdl, "data/centre_county_cdl_2015.tif", overwrite=TRUE, datatype="INT1U")
 
-writeRaster(county_floral_sp, "data/centre_county_springfloral_2015.tif", overwrite=TRUE)
+writeRaster(centre_floral_sp, "data/centre_county_springfloral_2015.tif", overwrite=TRUE)
 ```
 
 ## Check your learning
@@ -270,7 +270,7 @@ Using `ggplot2` and `sf` we can add our points to our earlier map of Centre coun
 centre_cdl <- rast("data/centre_county_cdl_2015.tif") 
 
 ggplot()+
-  geom_spatraster(data = centre_cdl, aes(fill = CLASS_NAME)) +
+  geom_spatraster(data = centre_cdl, aes(fill = class_name)) +
   geom_sf(data=centre_sites) + 
   theme(legend.title = element_text(size = 7), 
         legend.text = element_text(size = 7), 
@@ -290,7 +290,7 @@ centre_sites_1000m
 We can visualize this buffer by adding it to our plot. Note you may need to expand your plot size to see the buffers behind the points. 
 ```{r}
 ggplot()+
-  geom_spatraster(data = centre_cdl, aes(fill = CLASS_NAME)) +
+  geom_spatraster(data = centre_cdl, aes(fill = class_name)) +
   geom_sf(data = centre_sites_1000m)+
   geom_sf(data=centre_sites) + 
   theme(legend.title = element_text(size = 7), 

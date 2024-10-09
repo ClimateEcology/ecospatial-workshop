@@ -1,6 +1,6 @@
 <PAMDataset>
   <PAMRasterBand band="1">
-    <Description>CLASS_NAME</Description>
+    <Description>class_name</Description>
     <CategoryNames>
       <Category>Background</Category>
       <Category>Corn</Category>
@@ -66,8 +66,8 @@
       <Category>Fallow/Idle Cropland</Category>
       <Category></Category>
       <Category>Forest</Category>
-      <Category>Shrubland</Category>
-      <Category>Barren</Category>
+      <Category></Category>
+      <Category></Category>
       <Category>Cherries</Category>
       <Category>Peaches</Category>
       <Category>Apples</Category>
