@@ -1,0 +1,263 @@
+<PAMDataset>
+  <PAMRasterBand band="1">
+    <Description>class_name</Description>
+    <CategoryNames>
+      <Category>Background</Category>
+      <Category>Corn</Category>
+      <Category>Cotton</Category>
+      <Category>Rice</Category>
+      <Category>Sorghum</Category>
+      <Category>Soybeans</Category>
+      <Category>Sunflower</Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category>Peanuts</Category>
+      <Category>Tobacco</Category>
+      <Category>Sweet Corn</Category>
+      <Category>Pop or Orn Corn</Category>
+      <Category>Mint</Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category>Barley</Category>
+      <Category>Durum Wheat</Category>
+      <Category>Spring Wheat</Category>
+      <Category>Winter Wheat</Category>
+      <Category>Other Small Grains</Category>
+      <Category>Dbl Crop WinWht/Soybeans</Category>
+      <Category>Rye</Category>
+      <Category>Oats</Category>
+      <Category>Millet</Category>
+      <Category>Speltz</Category>
+      <Category>Canola</Category>
+      <Category>Flaxseed</Category>
+      <Category>Safflower</Category>
+      <Category>Rape Seed</Category>
+      <Category>Mustard</Category>
+      <Category>Alfalfa</Category>
+      <Category>Other Hay/Non Alfalfa</Category>
+      <Category>Camelina</Category>
+      <Category>Buckwheat</Category>
+      <Category></Category>
+      <Category>Sugarbeets</Category>
+      <Category>Dry Beans</Category>
+      <Category>Potatoes</Category>
+      <Category>Other Crops</Category>
+      <Category>Sugarcane</Category>
+      <Category>Sweet Potatoes</Category>
+      <Category>Misc Vegs &amp; Fruits</Category>
+      <Category>Watermelons</Category>
+      <Category>Onions</Category>
+      <Category>Cucumbers</Category>
+      <Category>Chick Peas</Category>
+      <Category>Lentils</Category>
+      <Category>Peas</Category>
+      <Category>Tomatoes</Category>
+      <Category>Caneberries</Category>
+      <Category>Hops</Category>
+      <Category>Herbs</Category>
+      <Category>Clover/Wildflowers</Category>
+      <Category>Sod/Grass Seed</Category>
+      <Category>Switchgrass</Category>
+      <Category>Fallow/Idle Cropland</Category>
+      <Category></Category>
+      <Category>Forest</Category>
+      <Category></Category>
+      <Category></Category>
+      <Category>Cherries</Category>
+      <Category>Peaches</Category>
+      <Category>Apples</Category>
+      <Category>Grapes</Category>
+      <Category>Christmas Trees</Category>
+      <Category>Other Tree Crops</Category>
+      <Category>Citrus</Category>
+      <Category></Category>
+      <Category>Pecans</Category>
+      <Category>Almonds</Category>
+      <Category>Walnuts</Category>
+      <Category>Pears</Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category>Clouds/No Data</Category>
+      <Category>Developed</Category>
+      <Category>Water</Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category>Wetlands</Category>
+      <Category>Nonag/Undefined</Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category>Aquaculture</Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category>Open Water</Category>
+      <Category>Perennial Ice/Snow</Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category>Developed/Open Space</Category>
+      <Category>Developed/Low Intensity</Category>
+      <Category>Developed/Med Intensity</Category>
+      <Category>Developed/High Intensity</Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category>Barren</Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category>Deciduous Forest</Category>
+      <Category>Evergreen Forest</Category>
+      <Category>Mixed Forest</Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category>Shrubland</Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category>Grassland/Pasture</Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category>Woody Wetlands</Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category>Herbaceous Wetlands</Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category>Pistachios</Category>
+      <Category>Triticale</Category>
+      <Category>Carrots</Category>
+      <Category>Asparagus</Category>
+      <Category>Garlic</Category>
+      <Category>Cantaloupes</Category>
+      <Category>Prunes</Category>
+      <Category>Olives</Category>
+      <Category>Oranges</Category>
+      <Category>Honeydew Melons</Category>
+      <Category>Broccoli</Category>
+      <Category>Avocados</Category>
+      <Category>Peppers</Category>
+      <Category>Pomegranates</Category>
+      <Category>Nectarines</Category>
+      <Category>Greens</Category>
+      <Category>Plums</Category>
+      <Category>Strawberries</Category>
+      <Category>Squash</Category>
+      <Category>Apricots</Category>
+      <Category>Vetch</Category>
+      <Category>Dbl Crop WinWht/Corn</Category>
+      <Category>Dbl Crop Oats/Corn</Category>
+      <Category>Lettuce</Category>
+      <Category>Dbl Crop Triticale/Corn</Category>
+      <Category>Pumpkins</Category>
+      <Category>Dbl Crop Lettuce/Durum Wht</Category>
+      <Category>Dbl Crop Lettuce/Cantaloupe</Category>
+      <Category>Dbl Crop Lettuce/Cotton</Category>
+      <Category>Dbl Crop Lettuce/Barley</Category>
+      <Category>Dbl Crop Durum Wht/Sorghum</Category>
+      <Category>Dbl Crop Barley/Sorghum</Category>
+      <Category>Dbl Crop WinWht/Sorghum</Category>
+      <Category>Dbl Crop Barley/Corn</Category>
+      <Category>Dbl Crop WinWht/Cotton</Category>
+      <Category>Dbl Crop Soybeans/Cotton</Category>
+      <Category>Dbl Crop Soybeans/Oats</Category>
+      <Category>Dbl Crop Corn/Soybeans</Category>
+      <Category>Blueberries</Category>
+      <Category>Cabbage</Category>
+      <Category>Cauliflower</Category>
+      <Category>Celery</Category>
+      <Category>Radishes</Category>
+      <Category>Turnips</Category>
+      <Category>Eggplants</Category>
+      <Category>Gourds</Category>
+      <Category>Cranberries</Category>
+      <Category></Category>
+      <Category></Category>
+      <Category></Category>
+      <Category>Dbl Crop Barley/Soybeans</Category>
+      <Category></Category>
+    </CategoryNames>
+  </PAMRasterBand>
+</PAMDataset>

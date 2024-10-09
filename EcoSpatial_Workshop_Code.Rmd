@@ -209,9 +209,9 @@ hist(values(centre_floral_sp, na.rm=TRUE))       # make a basic histogram of val
 We can save our raster files as a .tif using `writeRaster`. For the CDL raster we will save the data in "INT1U" format which will also save the class names and color table. 
 
 ```{r write_raster}
-writeRaster(centre_cdl, "data/centre_county_cdl_2015.tif", overwrite=TRUE, datatype="INT1U")
+writeRaster(centre_cdl, "data/centre_county_cdl_2021.tif", overwrite=TRUE, datatype="INT1U")
 
-writeRaster(centre_floral_sp, "data/centre_county_springfloral_2015.tif", overwrite=TRUE)
+writeRaster(centre_floral_sp, "data/centre_county_springfloral_2021.tif", overwrite=TRUE)
 ```
 
 ## Check your learning
@@ -267,7 +267,7 @@ Using `ggplot2` and `sf` we can add our points to our earlier map of Centre coun
 
 ```{r}
 #Centre county CDL from raster exercise
-centre_cdl <- rast("data/centre_county_cdl_2015.tif") 
+centre_cdl <- rast("data/centre_county_cdl_2021.tif") 
 
 ggplot()+
   geom_spatraster(data = centre_cdl, aes(fill = class_name)) +
@@ -324,8 +324,8 @@ centre_table_1000m_prop
 ## Write out shapefiles
 we can write out vector data to shapefiles using `st_write()`
 ```{r}
-st_write(centre_sites, "data/centre_sites.shp")
-st_write(centre_sites_1000m, "data/centre_sites_buffer_1000m.shp")
+st_write(centre_sites, "data/centre_sites.shp", delete_layer = TRUE)
+st_write(centre_sites_1000m, "data/centre_sites_buffer_1000m.shp", delete_layer = TRUE)
 ```
 
 
