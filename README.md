@@ -3,14 +3,13 @@
 
 # EcoSpatial Summit Workshop
 
-This workshop is designed to introduce users to the new
-<a href="https://beesuite.psu.edu/beeshiny/"
-target="_blank"><strong>beeshiny app</strong></a>.
+This workshop is designed to introduce users to the new [**beeshiny
+app**](https://beesuite.psu.edu/beeshiny/).
 
 beeshiny can be used to query data commonly used when modeling the
 environemental drivers of species’ or commmunity responses. beeshiny was
 originally build as a companion to
-<a href="https://beescape.psu.edu/" target="_blank">Beescape</a>.
+[Beescape](https://beescape.psu.edu/).
 
 beeshiny allows users to extract:
 
@@ -39,9 +38,8 @@ beeshiny allows users to extract:
 
 ## Data Details
 
-- We will use data downloaded from the
-  <a href="https://beesuite.psu.edu/beeshiny/"
-  target="_blank"><strong>beeshiny app</strong></a>.
+- We will use data downloaded from the [**beeshiny
+  app**](https://beesuite.psu.edu/beeshiny/).
 
 - We will also use point data representing hypothetical sites in Centre
   County, PA, which can be downloaded from this repository at
@@ -90,10 +88,9 @@ library(tidyterra)
 
 ## Get raster data from beeshiny
 
-Use <a href="https://beesuite.psu.edu/beeshiny/"
-target="_blank"><strong>beeshiny</strong></a> to download the cropland
-data layer (CDL) raster for **Centre County, Pennsylvania** for the year
-**2021**.
+Use [**beeshiny**](https://beesuite.psu.edu/beeshiny/) to download the
+cropland data layer (CDL) raster for **Centre County, Pennsylvania** for
+the year **2021**.
 
 ## Read in raster data
 
@@ -196,9 +193,8 @@ plot(centre_cdl)  # plot, as above, but now R knows what the numeric values mean
 
 ![](README_files/figure-gfm/def_level-1.png)<!-- -->
 
-Then we can recolor the classes to match the traditional <a
-href="https://www.nass.usda.gov/Research_and_Science/Cropland/docs/US_2023_CDL_legend.jpg"
-target="_blank">NASS CDL style</a>.
+Then we can recolor the classes to match the traditional [NASS CDL
+style](https://www.nass.usda.gov/Research_and_Science/Cropland/docs/US_2023_CDL_legend.jpg).
 
 This color information is stored in columns 2-5 of the `cdl_colormap`
 table, representing red, green, blue, and alpha (transparency) values.
@@ -248,8 +244,8 @@ ggplot() +
 Up to know, our CDL raster values are still numeric values that
 represent crop land cover class from the CDL. We can reclassify these
 CDL values to the estimated floral resources of each land cover class,
-based on <a href="https://www.pnas.org/doi/abs/10.1073/pnas.1517685113"
-target="_blank">Koh et al. (2015)</a>.
+based on [Koh et
+al. (2015)](https://www.pnas.org/doi/abs/10.1073/pnas.1517685113).
 
 A reclassification table based on Koh et al. is in the `data/` folder.
 The table rows connect each CDL value to its corresponding class name
