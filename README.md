@@ -38,10 +38,12 @@ beeshiny allows users to extract:
 
 ## Data Details
 
-We will use data downloaded from the [**beeshiny
-app**](https://beesuite.psu.edu/beeshiny/), along with point data
-representing hypothetical sites in Centre County, PA, which can be
-downloaded from this repository in the \`/data\`\` folder.
+- We will use data downloaded from the [**beeshiny
+  app**](https://beesuite.psu.edu/beeshiny/).
+
+- We will also use point data representing hypothetical sites in Centre
+  County, PA, which can be downloaded from this repository at
+  `/data/centre_co_pts.csv`.
 
 - *Note that if you are unable to access the data on beeshiny, backup
   data are available in the repository in* `data/backups`
@@ -49,10 +51,9 @@ downloaded from this repository in the \`/data\`\` folder.
 ## Load packages
 
 There are a number of packages in R that are helpful in working with
-spatial data. For this workshop we will be using
-[sf](https://r-spatial.github.io/sf/) and
-[terra](https://rspatial.org/index.html). For data wrangling and
-visualizations we will use `dplyr`, `ggplot2` and `tidyterra`.
+spatial data. For this workshop we will be using `sf` and `terra`. For
+data wrangling and visualizations we will use `dplyr`, `ggplot2` and
+`tidyterra`.
 
 | Name | Description | Link |
 |:---|:---|:---|
@@ -66,15 +67,18 @@ Because some spatial functions have the same names as dplyr functions it
 is helpful to load the spatial packages last. We can also use the `::`
 to specify the package for function calls.
 
-Unhash and use install.packages for any packages your may not already
-have installed
+Unhash (remove the preceding `#`) and use install.packages for any
+packages your may not already have installed
 
 ``` r
+# install.packages("dplyr", dependencies = TRUE)
+# install.packages("ggplot2", dependencies = TRUE)
+# install.packages("sf", dependencies = TRUE)
+# install.packages("terra", dependencies = TRUE)
+# install.packages("tidyterra", dependencies = TRUE)
+
 library(dplyr)
 library(ggplot2)
-#install.packages("sf", dependencies = TRUE)
-#install.packages("terra", dependencies = TRUE)
-#install.packages("tidyterra", dependencies = TRUE)
 library(sf)
 library(terra)
 library(tidyterra)
@@ -84,8 +88,9 @@ library(tidyterra)
 
 ## Get raster data from beeshiny
 
-Use [**beeshiny**](https://beesuite.psu.edu/beeshiny/) to download a CDL
-raster for any county in the US you would like for any year you want
+Use [**beeshiny**](https://beesuite.psu.edu/beeshiny/) to download the
+cropland data layer (CDL) raster for **Centre County, Pennsylvania** for
+the year **2021**.
 
 ## Read in raster data
 
@@ -94,17 +99,18 @@ data.zip. Inside this file you should have a .tif file. The name
 indicates the data type, in this case CDL, the year and the FIPS code
 that corresponds to the county you selected.
 
-Move the .tif file into the /data folder in your ecospatial-workshop
-directory
+**For the code below to work, you must move the .tif file into the
+`/data` folder in your ecospatial-workshop directory.**
 
 The first thing we will do is use the `rast()` function to read the .tif
-file into R as a SpatRaster. NOTE: your CDL file may have a different
-year and a different number after the FIPS code.
+file into R as a `SpatRaster` object. NOTE: if you aren’t able to
+download the raster from beeshiny, you can access a pre-downloaded copy
+in the `data/backups/` folder.
 
 ``` r
-county_cdl <- rast("data/CDL_2021_FIPS_42027.tif") # <- replace the .tif file with your file name
+centre_cdl <- rast("data/CDL_2021_FIPS_42027.tif")    # add `backup/` after data to use backup data
 
-county_cdl
+centre_cdl
 #> class       : SpatRaster 
 #> dimensions  : 2147, 3167, 1  (nrow, ncol, nlyr)
 #> resolution  : 30, 30  (x, y)
@@ -127,54 +133,135 @@ were originally extracted from.
 Let’s view the CRS for your county cdl:
 
 ``` r
-crs(county_cdl)
+crs(centre_cdl)
 #> [1] "PROJCRS[\"NAD83 / Conus Albers\",\n    BASEGEOGCRS[\"NAD83\",\n        DATUM[\"North American Datum 1983\",\n            ELLIPSOID[\"GRS 1980\",6378137,298.257222101,\n                LENGTHUNIT[\"metre\",1]]],\n        PRIMEM[\"Greenwich\",0,\n            ANGLEUNIT[\"degree\",0.0174532925199433]],\n        ID[\"EPSG\",4269]],\n    CONVERSION[\"Conus Albers\",\n        METHOD[\"Albers Equal Area\",\n            ID[\"EPSG\",9822]],\n        PARAMETER[\"Latitude of false origin\",23,\n            ANGLEUNIT[\"degree\",0.0174532925199433],\n            ID[\"EPSG\",8821]],\n        PARAMETER[\"Longitude of false origin\",-96,\n            ANGLEUNIT[\"degree\",0.0174532925199433],\n            ID[\"EPSG\",8822]],\n        PARAMETER[\"Latitude of 1st standard parallel\",29.5,\n            ANGLEUNIT[\"degree\",0.0174532925199433],\n            ID[\"EPSG\",8823]],\n        PARAMETER[\"Latitude of 2nd standard parallel\",45.5,\n            ANGLEUNIT[\"degree\",0.0174532925199433],\n            ID[\"EPSG\",8824]],\n        PARAMETER[\"Easting at false origin\",0,\n            LENGTHUNIT[\"metre\",1],\n            ID[\"EPSG\",8826]],\n        PARAMETER[\"Northing at false origin\",0,\n            LENGTHUNIT[\"metre\",1],\n            ID[\"EPSG\",8827]]],\n    CS[Cartesian,2],\n        AXIS[\"easting (X)\",east,\n            ORDER[1],\n            LENGTHUNIT[\"metre\",1]],\n        AXIS[\"northing (Y)\",north,\n            ORDER[2],\n            LENGTHUNIT[\"metre\",1]],\n    USAGE[\n        SCOPE[\"Data analysis and small scale data presentation for contiguous lower 48 states.\"],\n        AREA[\"United States (USA) - CONUS onshore - Alabama; Arizona; Arkansas; California; Colorado; Connecticut; Delaware; Florida; Georgia; Idaho; Illinois; Indiana; Iowa; Kansas; Kentucky; Louisiana; Maine; Maryland; Massachusetts; Michigan; Minnesota; Mississippi; Missouri; Montana; Nebraska; Nevada; New Hampshire; New Jersey; New Mexico; New York; North Carolina; North Dakota; Ohio; Oklahoma; Oregon; Pennsylvania; Rhode Island; South Carolina; South Dakota; Tennessee; Texas; Utah; Vermont; Virginia; Washington; West Virginia; Wisconsin; Wyoming.\"],\n        BBOX[24.41,-124.79,49.38,-66.91]],\n    ID[\"EPSG\",5070]]"
 ```
 
 We can see that our CDL raster is using the North American Datum of 1983
-as it’s model for the shape of the earth. Our two-dimensional projection
+as its model for the shape of the earth. Our two-dimensional projection
 model of earth’s 3d surface is Alber’s Equal Area and the units of our
 coordinates are in meters.
 
 ## Visualize raster data
 
-We can visualize our county CDl raster using either base R plotting and
-terra
+We can visualize our county CDl raster by using the base R `plot`
+function:
 
 ``` r
-plot(county_cdl)
+plot(centre_cdl)
 ```
 
 ![](README_files/figure-gfm/base-1.png)<!-- -->
 
-or using ggplot2 and tidyterra
+We’ll talk about other plotting options such as using the packages
+`ggplot2` and `tidyterra` a little later.
+
+### Reclass to named CDL classes
+
+Right now we are viewing the raw numeric codes of the CDL. These codes
+mean something: the crop land cover class. We can tell `terra` what
+these codes mean so that it will show the land cover class names rather
+than the raw values. The information for these land cover values (along
+with their colors) are stored in the color table in
+`data/cdl_colormap.csv`.
 
 ``` r
-ggplot() +
-  geom_spatraster(data = county_cdl, aes(fill = Class_Names)) 
+cdl_colormap <- read.csv("data/cdl_colormap.csv")   # read in the table
+
+head(cdl_colormap)  # use `head()` to take a look at the first 5 rows of cdl_colormap
+#>   value red green blue alpha class_name
+#> 1     0   0     0    0   255 Background
+#> 2     1 255   211    0   255       Corn
+#> 3     2 255    38   38   255     Cotton
+#> 4     3   0   168  228   255       Rice
+#> 5     4 255   158   11   255    Sorghum
+#> 6     5  38   112    0   255   Soybeans
+```
+
+**Question:** Which column represents the raw CDL values and which
+column represents their land cover class?
+
+We set the levels of the raster to the land cover class names using the
+relevant elements of `cdl_colormap`: ‘value’ (column 1) and ‘class_name’
+(column 6).
+
+``` r
+levels(centre_cdl) <- cdl_colormap[,c(1,6)]
+
+plot(centre_cdl)  # plot, as above, but now R knows what the numeric values mean
+```
+
+![](README_files/figure-gfm/def_level-1.png)<!-- -->
+
+Then we can recolor the classes to match the traditional [NASS CDL
+style](https://www.nass.usda.gov/Research_and_Science/Cropland/docs/US_2023_CDL_legend.jpg).
+
+This color information is stored in columns 2-5 of the `cdl_colormap`
+table, representing red, green, blue, and alpha (transparency) values.
+We use the function `coltab` to supply the color map with this
+information in columns that are in this specific order, plus the
+corresponding (raw) raster value as the first column (they are already
+set up as the first 5 columns of `cdl_colormap`)
+
+``` r
+coltab(centre_cdl) <- cdl_colormap[,1:5]
+
+plot(centre_cdl)  # plot, as above, but now R knows what the numeric values mean and assigns colors
+```
+
+![](README_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+
+Let’s look at some customization options. To do this, we’ll be using the
+`ggplot2` `tidyterra` packages. `ggplot2` plots a little differently
+from base R. Data elements are layered on top of a base plot using `+`
+signs and functions that start with `geom_`. Here, we’re starting with a
+blank base plot and adding the spatraster object using
+`geom_spatraster()`.
+
+``` r
+ggplot() +  # blank base plot
+  geom_spatraster(data = centre_cdl, aes(fill = class_name))   # add the spatraster layer
 ```
 
 ![](README_files/figure-gfm/ggplot-1.png)<!-- -->
 
-## Reclass raster values
-
-We can reclassify the CDL raster giving it the proper land cover names
-and turning it into a map of floral resources using the values from [Koh
-et al. 2015](https://www.pnas.org/doi/abs/10.1073/pnas.1517685113).
-
-The table contains each CDL value, it’s corresponding class name and the
-values for several indices.
+The legend is now quite large but can be easily modified using `ggplot2`
+`theme` functions.
 
 ``` r
-reclass_table <- read.csv("data/cdl_reclass_koh.csv")
-head(reclass_table)
-#>   Class_Names CLASS_NAME nesting_ground_availability_index
-#> 1           0 Background                         0.0000000
-#> 2           1       Corn                         0.1451854
-#> 3           2     Cotton                         0.3355898
-#> 4           3       Rice                         0.1513067
-#> 5           4    Sorghum                         0.1451854
-#> 6           5   Soybeans                         0.1993286
+ggplot() +
+  geom_spatraster(data = centre_cdl, aes(fill = class_name)) +
+  theme(legend.title = element_text(size = 7), # make legend title smaller
+        legend.text = element_text(size = 7), # make legend text smaller
+        legend.key.size = unit(0.25, 'cm'), #make legend color keys smaller
+        legend.position="bottom") # move legend to the bottom of the plot
+```
+
+![](README_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+
+### Reclass crop land cover to spring floral resources
+
+Up to know, our CDL raster values are still numeric values that
+represent crop land cover class from the CDL. We can reclassify these
+CDL values to the estimated floral resources of each land cover class,
+based on [Koh et
+al. (2015)](https://www.pnas.org/doi/abs/10.1073/pnas.1517685113).
+
+A reclassification table based on Koh et al. is in the `data/` folder.
+The table rows connect each CDL value to its corresponding class name
+and the values for several indices.
+
+``` r
+reclass_table <- read.csv("data/cdl_reclass_koh.csv")  # read in the reclassification table
+
+head(reclass_table)     # take a look at the first 5 rows
+#>   value class_name nesting_ground_availability_index
+#> 1     0 Background                         0.0000000
+#> 2     1       Corn                         0.1451854
+#> 3     2     Cotton                         0.3355898
+#> 4     3       Rice                         0.1513067
+#> 5     4    Sorghum                         0.1451854
+#> 6     5   Soybeans                         0.1993286
 #>   nesting_cavity_availability_index nesting_stem_availability_index
 #> 1                        0.00000000                       0.0000000
 #> 2                        0.08947642                       0.1069437
@@ -198,397 +285,136 @@ head(reclass_table)
 #> 6                     0.3971508                   0.1858675
 ```
 
-We can see from our plots that the CDL Class Names are stored as numeric
-values, these have no numeric meaning. They simply correspond to a land
-cover class.
+A reclassification table assigns the original values of a raster (listed
+in the first column) to a new value (listed in the second column). This
+is done using the `classify()` function.
 
-The values can be reclassified into their class names or into other
-values using the `classify()` function.
-
-### Reclass to named CDL classes
-
-We can also reclassify the CDL to show it’s land class names rather than
-the values. In this case we will use a different work flow by modifying
-the levels.
-
-First we set the levels of the raster to the land cover class names
-using the first two columns of our reclass table
+We will select the columns corresponding to the CDL value and the spring
+floral resources as our original and new values, respectively, for our
+reclass table. We’ll reclassify the Centre County CDL and generate a map
+of spring floral resources across the county.
 
 ``` r
-levels(county_cdl) <- as.data.frame(reclass_table[,1:2])
-```
-
-Then we can even recolor the classes to match the traditional NASS CDL
-style.
-
-First, we will load in a file with which describes the color values
-associated with each CDL value.
-
-``` r
-cdl_colormap <- read.csv("data/cdl_colormap.csv")
-cdl_colormap
-#>     Class red green blue alpha
-#> 1       0   0     0    0   255
-#> 2       1 255   211    0   255
-#> 3       2 255    38   38   255
-#> 4       3   0   168  228   255
-#> 5       4 255   158   11   255
-#> 6       5  38   112    0   255
-#> 7       6 255   255    0   255
-#> 8       7   0     0    0   255
-#> 9       8   0     0    0   255
-#> 10      9   0     0    0   255
-#> 11     10 112   165    0   255
-#> 12     11   0   175   75   255
-#> 13     12 221   165   11   255
-#> 14     13 221   165   11   255
-#> 15     14 126   211  255   255
-#> 16     15   0     0    0   255
-#> 17     16   0     0    0   255
-#> 18     17   0     0    0   255
-#> 19     18   0     0    0   255
-#> 20     19   0     0    0   255
-#> 21     20   0     0    0   255
-#> 22     21 226     0  124   255
-#> 23     22 137    98   84   255
-#> 24     23 216   181  107   255
-#> 25     24 165   112    0   255
-#> 26     25 214   158  188   255
-#> 27     26 112   112    0   255
-#> 28     27 172     0  124   255
-#> 29     28 160    89  137   255
-#> 30     29 112     0   73   255
-#> 31     30 214   158  188   255
-#> 32     31 209   255    0   255
-#> 33     32 126   153  255   255
-#> 34     33 214   214    0   255
-#> 35     34 209   255    0   255
-#> 36     35   0   175   75   255
-#> 37     36 255   165  226   255
-#> 38     37 165   242  140   255
-#> 39     38   0   175   75   255
-#> 40     39 214   158  188   255
-#> 41     40   0     0    0   255
-#> 42     41 168     0  228   255
-#> 43     42 165     0    0   255
-#> 44     43 112    38    0   255
-#> 45     44   0   175   75   255
-#> 46     45 177   126  255   255
-#> 47     46 112    38    0   255
-#> 48     47 255   102  102   255
-#> 49     48 255   102  102   255
-#> 50     49 255   204  102   255
-#> 51     50 255   102  102   255
-#> 52     51   0   175   75   255
-#> 53     52   0   221  175   255
-#> 54     53  84   255    0   255
-#> 55     54 242   163  119   255
-#> 56     55 255   102  102   255
-#> 57     56   0   175   75   255
-#> 58     57 126   211  255   255
-#> 59     58 232   191  255   255
-#> 60     59 175   255  221   255
-#> 61     60   0   175   75   255
-#> 62     61 191   191  119   255
-#> 63     62   0     0    0   255
-#> 64     63 147   204  147   255
-#> 65     64 198   214  158   255
-#> 66     65 204   191  163   255
-#> 67     66 255     0  255   255
-#> 68     67 255   142  170   255
-#> 69     68 186     0   79   255
-#> 70     69 112    68  137   255
-#> 71     70   0   119  119   255
-#> 72     71 177   154  112   255
-#> 73     72 255   255  126   255
-#> 74     73   0     0    0   255
-#> 75     74 181   112   91   255
-#> 76     75   0   165  130   255
-#> 77     76 233   214  175   255
-#> 78     77 177   154  112   255
-#> 79     78   0     0    0   255
-#> 80     79   0     0    0   255
-#> 81     80   0     0    0   255
-#> 82     81 242   242  242   255
-#> 83     82 154   154  154   255
-#> 84     83  75   112  163   255
-#> 85     84   0     0    0   255
-#> 86     85   0     0    0   255
-#> 87     86   0     0    0   255
-#> 88     87 126   177  177   255
-#> 89     88 232   255  191   255
-#> 90     89   0     0    0   255
-#> 91     90   0     0    0   255
-#> 92     91   0     0    0   255
-#> 93     92   0   255  255   255
-#> 94     93   0     0    0   255
-#> 95     94   0     0    0   255
-#> 96     95   0     0    0   255
-#> 97     96   0     0    0   255
-#> 98     97   0     0    0   255
-#> 99     98   0     0    0   255
-#> 100    99   0     0    0   255
-#> 101   100   0     0    0   255
-#> 102   101   0     0    0   255
-#> 103   102   0     0    0   255
-#> 104   103   0     0    0   255
-#> 105   104   0     0    0   255
-#> 106   105   0     0    0   255
-#> 107   106   0     0    0   255
-#> 108   107   0     0    0   255
-#> 109   108   0     0    0   255
-#> 110   109   0     0    0   255
-#> 111   110   0     0    0   255
-#> 112   111  75   112  163   255
-#> 113   112 211   226  249   255
-#> 114   113   0     0    0   255
-#> 115   114   0     0    0   255
-#> 116   115   0     0    0   255
-#> 117   116   0     0    0   255
-#> 118   117   0     0    0   255
-#> 119   118   0     0    0   255
-#> 120   119   0     0    0   255
-#> 121   120   0     0    0   255
-#> 122   121 154   154  154   255
-#> 123   122 154   154  154   255
-#> 124   123 154   154  154   255
-#> 125   124 154   154  154   255
-#> 126   125   0     0    0   255
-#> 127   126   0     0    0   255
-#> 128   127   0     0    0   255
-#> 129   128   0     0    0   255
-#> 130   129   0     0    0   255
-#> 131   130   0     0    0   255
-#> 132   131 204   191  163   255
-#> 133   132   0     0    0   255
-#> 134   133   0     0    0   255
-#> 135   134   0     0    0   255
-#> 136   135   0     0    0   255
-#> 137   136   0     0    0   255
-#> 138   137   0     0    0   255
-#> 139   138   0     0    0   255
-#> 140   139   0     0    0   255
-#> 141   140   0     0    0   255
-#> 142   141 147   204  147   255
-#> 143   142 147   204  147   255
-#> 144   143 147   204  147   255
-#> 145   144   0     0    0   255
-#> 146   145   0     0    0   255
-#> 147   146   0     0    0   255
-#> 148   147   0     0    0   255
-#> 149   148   0     0    0   255
-#> 150   149   0     0    0   255
-#> 151   150   0     0    0   255
-#> 152   151   0     0    0   255
-#> 153   152 198   214  158   255
-#> 154   153   0     0    0   255
-#> 155   154   0     0    0   255
-#> 156   155   0     0    0   255
-#> 157   156   0     0    0   255
-#> 158   157   0     0    0   255
-#> 159   158   0     0    0   255
-#> 160   159   0     0    0   255
-#> 161   160   0     0    0   255
-#> 162   161   0     0    0   255
-#> 163   162   0     0    0   255
-#> 164   163   0     0    0   255
-#> 165   164   0     0    0   255
-#> 166   165   0     0    0   255
-#> 167   166   0     0    0   255
-#> 168   167   0     0    0   255
-#> 169   168   0     0    0   255
-#> 170   169   0     0    0   255
-#> 171   170   0     0    0   255
-#> 172   171   0     0    0   255
-#> 173   172   0     0    0   255
-#> 174   173   0     0    0   255
-#> 175   174   0     0    0   255
-#> 176   175   0     0    0   255
-#> 177   176 232   255  191   255
-#> 178   177   0     0    0   255
-#> 179   178   0     0    0   255
-#> 180   179   0     0    0   255
-#> 181   180   0     0    0   255
-#> 182   181   0     0    0   255
-#> 183   182   0     0    0   255
-#> 184   183   0     0    0   255
-#> 185   184   0     0    0   255
-#> 186   185   0     0    0   255
-#> 187   186   0     0    0   255
-#> 188   187   0     0    0   255
-#> 189   188   0     0    0   255
-#> 190   189   0     0    0   255
-#> 191   190 126   177  177   255
-#> 192   191   0     0    0   255
-#> 193   192   0     0    0   255
-#> 194   193   0     0    0   255
-#> 195   194   0     0    0   255
-#> 196   195 126   177  177   255
-#> 197   196   0     0    0   255
-#> 198   197   0     0    0   255
-#> 199   198   0     0    0   255
-#> 200   199   0     0    0   255
-#> 201   200   0     0    0   255
-#> 202   201   0     0    0   255
-#> 203   202   0     0    0   255
-#> 204   203   0     0    0   255
-#> 205   204   0   255  140   255
-#> 206   205 214   158  188   255
-#> 207   206 255   102  102   255
-#> 208   207 255   102  102   255
-#> 209   208 255   102  102   255
-#> 210   209 255   102  102   255
-#> 211   210 255   142  170   255
-#> 212   211  51    73   51   255
-#> 213   212 228   112   38   255
-#> 214   213 255   102  102   255
-#> 215   214 255   102  102   255
-#> 216   215 102   153   76   255
-#> 217   216 255   102  102   255
-#> 218   217 177   154  112   255
-#> 219   218 255   142  170   255
-#> 220   219 255   102  102   255
-#> 221   220 255   142  170   255
-#> 222   221 255   102  102   255
-#> 223   222 255   102  102   255
-#> 224   223 255   142  170   255
-#> 225   224   0   175   75   255
-#> 226   225 255   211    0   255
-#> 227   226 255   211    0   255
-#> 228   227 255   102  102   255
-#> 229   228 255   210    0   255
-#> 230   229 255   102  102   255
-#> 231   230 137    98   84   255
-#> 232   231 255   102  102   255
-#> 233   232 255    38   38   255
-#> 234   233 226     0  124   255
-#> 235   234 255   158   11   255
-#> 236   235 255   158   11   255
-#> 237   236 165   112    0   255
-#> 238   237 255   211    0   255
-#> 239   238 165   112    0   255
-#> 240   239  38   112    0   255
-#> 241   240  38   112    0   255
-#> 242   241 255   211    0   255
-#> 243   242   0     0  153   255
-#> 244   243 255   102  102   255
-#> 245   244 255   102  102   255
-#> 246   245 255   102  102   255
-#> 247   246 255   102  102   255
-#> 248   247 255   102  102   255
-#> 249   248 255   102  102   255
-#> 250   249 255   102  102   255
-#> 251   250 255   102  102   255
-#> 252   251   0     0    0   255
-#> 253   252   0     0    0   255
-#> 254   253   0     0    0   255
-#> 255   254  38   112    0   255
-#> 256   255   0     0    0   255
-```
-
-Then we can assign the color values to their corresponding levels in the
-raster and view a plot to check it out.
-
-``` r
-terra::coltab(county_cdl) <- cdl_colormap
-
-ggplot() +
-  geom_spatraster(data = county_cdl, aes(fill = CLASS_NAME))
-```
-
-![](README_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
-
-The legend is now quite large but can be easily modified using ggplot2
-themes functions
-
-``` r
-ggplot() +
-  geom_spatraster(data = county_cdl, aes(fill = CLASS_NAME)) +
-  theme(legend.title = element_text(size = 7), 
-        legend.text = element_text(size = 7), 
-        legend.key.size = unit(0.25, 'cm'),
-        legend.position="bottom") 
-```
-
-![](README_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
-
-### Reclass to spring floral resources map
-
-We will select just the columns corresponding to the CDL value and the
-spring floral resources to reclassify our county CDL and generate a map
-of spring floral resources across the county
-
-``` r
-county_floral_sp <- classify(county_cdl,
-                    reclass_table[,c("Class_Names",
+centre_floral_sp <- classify(centre_cdl,
+                    reclass_table[,c("value",
                                      "floral_resources_spring_index")])
 
-plot(county_floral_sp)
+plot(centre_floral_sp)
 ```
 
 ![](README_files/figure-gfm/reclass%20to%20forage-1.png)<!-- -->
 
 ## Inspect raster values
 
-Using the `values()` function we can inspect the distribution of spring
-floral values for your county. We will set the `na.rm=TRUE` argument so
-that all the cells outside of the county are not included
+Using the `values()` function we can directly inspect the spring floral
+values for Centre County. We will set the argument `na.rm=TRUE` so that
+all the empty cells (outside of the county) are not included. The result
+of `values()` shows individual grid cell values. In this case we will
+only extract the first 20 grid cell values.
 
 ``` r
-summary(values(county_floral_sp, na.rm=TRUE))
-#>    CLASS_NAME    
+values(centre_floral_sp, na.rm=TRUE)[1:20]   # just the first 20 cells
+#>  [1] 0.5848480 0.0000000 0.6965277 0.5848480 0.0000000 0.0000000 0.6965277
+#>  [8] 0.5848480 0.0000000 0.0000000 0.6965277 0.6965277 0.6965277 0.0000000
+#> [15] 0.0000000 0.0000000 0.6965277 0.6965277 0.5848480 0.0000000
+```
+
+We can also use some basic summary functions to view the distribution of
+floral resource values for the county.
+
+``` r
+summary(values(centre_floral_sp, na.rm=TRUE))    # make a summary with the quartiles and the mean
+#>    class_name    
 #>  Min.   :0.0000  
 #>  1st Qu.:0.4558  
 #>  Median :0.6965  
 #>  Mean   :0.5813  
 #>  3rd Qu.:0.6965  
 #>  Max.   :0.6993
-hist(values(county_floral_sp, na.rm=TRUE))
+
+hist(values(centre_floral_sp, na.rm=TRUE))       # make a basic histogram of values
 ```
 
-![](README_files/figure-gfm/inspect%20cdl-1.png)<!-- -->
+![](README_files/figure-gfm/summarize_values-1.png)<!-- -->
 
-and look at at individual grid cell values. In this case we, will only
-extract the first 20 grid cell values.
+## Write out raster files
+
+We can save our raster files as a .tif using `writeRaster`. For the CDL
+raster we will save the data in “INT1U” format which will also save the
+class names and color table.
 
 ``` r
-values(county_floral_sp, na.rm=TRUE)[1:20]
-#>  [1] 0.5848480 0.0000000 0.6965277 0.5848480 0.0000000 0.0000000 0.6965277
-#>  [8] 0.5848480 0.0000000 0.0000000 0.6965277 0.6965277 0.6965277 0.0000000
-#> [15] 0.0000000 0.0000000 0.6965277 0.6965277 0.5848480 0.0000000
+writeRaster(centre_cdl, "data/centre_county_cdl_2015.tif", overwrite=TRUE, datatype="INT1U")
+
+writeRaster(centre_floral_sp, "data/centre_county_springfloral_2015.tif", overwrite=TRUE)
 ```
 
 ## Check your learning
 
-1.  Use beeshiny to download the CDL raster for Centre County Pa for any
-    year you want
+1.  Use beeshiny to download the CDL raster for another county in the
+    continental US for any year you want.
 
-2.  Move the CDL raster for Centre County to the /data folder in your
-    ecospatial-workshop directory
+2.  Move the CDL raster for Centre County to the `/data` folder in your
+    ecospatial-workshop directory.
 
-3.  Read the raster into R as a terra SpatRaster
+3.  Read the raster into R as a terra `SpatRaster` using `rast()`.
 
-4.  Replace the CDL value codes with the land cover class names
+4.  Assign the CDL value codes with land cover class names using
+    `levels()` and assign colors using `cdl_colormap()`.
 
 ``` r
-centre_cdl <- rast("data/CDL_2021_FIPS_42027.tif") 
 
-#OR if beeshiny not working:
+# county_cdl <- rast("data/CDL_2021_FIPS_42027.tif") 
 
-centre_cdl <- rast("data/backups/pa_centre_cdl_2021.tif") 
-levels(centre_cdl) <- as.data.frame(reclass_table[,1:2])
-terra::coltab(centre_cdl) <- as.data.frame(cdl_colormap)
-#plot(centre_cdl)
+# levels(county_cdl) <- cdl_colormap[,c(1,6)]
+
+# coltab(county_cdl) <- cdl_colormap[,1:5]
+
+# plot(county_cdl)
 ```
 
-# Working with point data
+# Working with vector (points and polygons) data
 
 ## Read in point data
 
+Often we collect and store point data as coordinates in a non-spatial
+format such as a csv file which we need to convert into a spatial object
+in R.
+
+In the /data directory you should find a csv file with a set of points
+from Centre County Pa. We will read in and inspect these data.
+
 ``` r
 centre_sites <- read.csv("data/centre_co_pts.csv")
-centre_sites <- st_as_sf(centre_sites, coords=c("Long","Lat"), 
+centre_sites
+#>   SiteID      Long      Lat
+#> 1  Site1 -77.70654 40.80497
+#> 2  Site2 -77.89991 40.74921
+#> 3  Site3 -77.93778 41.00641
+#> 4  Site4 -77.86590 40.81954
+#> 5  Site5 -77.64715 41.02197
+#> 6  Site6 -77.84409 40.87366
+#> 7  Site7 -77.77373 40.82634
+#> 8  Site8 -77.69934 40.87697
+```
+
+and convert them into an sf spatial object. We use the `coords=`
+argument to indicate the columns that hold the longitude (X) and
+latitude (Y). We can also specify the CRS using the ‘crs=’ arguments and
+the appropriate EPSG code or other crs object. In our case we will give
+the EPSG code 4326 which corresponds to WGS 84, the system commonly used
+by Google Earth.
+
+``` r
+centre_sites <- st_as_sf(centre_sites, 
+                         coords=c("Long","Lat"), #indicate the x and y columns
                          crs = 4326) #set the crs
+```
+
+when we inspect the center_sites object we see that there is now
+additional information at the top.
+
+``` r
 centre_sites
 #> Simple feature collection with 8 features and 1 field
 #> Geometry type: POINT
@@ -608,9 +434,15 @@ centre_sites
 
 ## Visualize point data
 
+Using `ggplot2` and `sf` we can add our points to our earlier map of
+Centre county with the `geom_sf()` function.
+
 ``` r
+#Centre county CDL from raster exercise
+centre_cdl <- rast("data/centre_county_cdl_2015.tif") 
+
 ggplot()+
-  geom_spatraster(data = centre_cdl, aes(fill = CLASS_NAME)) +
+  geom_spatraster(data = centre_cdl, aes(fill = class_name)) +
   geom_sf(data=centre_sites) + 
   theme(legend.title = element_text(size = 7), 
         legend.text = element_text(size = 7), 
@@ -622,13 +454,35 @@ ggplot()+
 
 ## Buffer around points
 
+We can create a polygon object from our points by buffering around them
+in a 1000m radius. For example, we might do this when assessing land
+cover values around a site.
+
 ``` r
 centre_sites_1000m <- st_buffer(centre_sites, 1000)
+centre_sites_1000m
+#> Simple feature collection with 8 features and 1 field
+#> Geometry type: POLYGON
+#> Dimension:     XY
+#> Bounding box:  xmin: -77.94977 ymin: 40.74008 xmax: -77.63518 ymax: 41.03112
+#> Geodetic CRS:  WGS 84
+#>   SiteID                       geometry
+#> 1  Site1 POLYGON ((-77.70945 40.8137...
+#> 2  Site2 POLYGON ((-77.90568 40.7412...
+#> 3  Site3 POLYGON ((-77.92781 41.0013...
+#> 4  Site4 POLYGON ((-77.85495 40.8230...
+#> 5  Site5 POLYGON ((-77.65648 41.0163...
+#> 6  Site6 POLYGON ((-77.84816 40.8651...
+#> 7  Site7 POLYGON ((-77.76805 40.8184...
+#> 8  Site8 POLYGON ((-77.69978 40.886,...
 ```
+
+We can visualize this buffer by adding it to our plot. Note you may need
+to expand your plot size to see the buffers behind the points.
 
 ``` r
 ggplot()+
-  geom_spatraster(data = centre_cdl, aes(fill = CLASS_NAME)) +
+  geom_spatraster(data = centre_cdl, aes(fill = class_name)) +
   geom_sf(data = centre_sites_1000m)+
   geom_sf(data=centre_sites) + 
   theme(legend.title = element_text(size = 7), 
@@ -640,6 +494,12 @@ ggplot()+
 ![](README_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
 ## Extract CDL values within buffers
+
+If we wanted to assess land cover around a site in a way that is similar
+to the results that beeshiny provides, we can use the `extract()`
+function from terra. First providing the raster we want to extract
+values from, then the sf object that defines the zones in which the
+raster will the summarized.
 
 ``` r
 centre_table_1000m <- extract(centre_cdl, centre_sites_1000m, fun="table", ID=F)
@@ -707,105 +567,105 @@ centre_table_1000m
 #> 6        0           0    0     0                  0              0           0
 #> 7        0           0    0     0                  0              0           0
 #> 8        0           0    0     0                  0              0           0
-#>   Fallow/Idle Cropland Forest Shrubland Barren Cherries Peaches Apples Grapes
-#> 1                    0      0         0      4        0       0      0      0
-#> 2                    0      0         0      0        0       0      0      0
-#> 3                    0      0         0      0        0       0      0      0
-#> 4                    0      0         1      1        0       0      1      0
-#> 5                    0      0         1      7        0       0      0      0
-#> 6                    0      0         1      1        0       0      1      0
-#> 7                    0      0         5      0        0       0      0      0
-#> 8                    0      0         1      7        0       0      0      0
-#>   Christmas Trees Other Tree Crops Citrus Pecans Almonds Walnuts Pears
-#> 1               0                0      0      0       0       0     0
-#> 2               0                0      0      0       0       0     0
-#> 3               0                0      0      0       0       0     0
-#> 4               0                0      0      0       0       0     0
-#> 5               0                0      0      0       0       0     0
-#> 6               0                0      0      0       0       0     0
-#> 7               0                0      0      0       0       0     0
-#> 8               0                0      0      0       0       0     0
-#>   Clouds/No Data Developed Water Wetlands Nonag/Undefined Aquaculture
-#> 1              0         0     0        0               0           0
-#> 2              0         0     0        0               0           0
-#> 3              0         0     0        0               0           0
-#> 4              0         0     0        0               0           0
-#> 5              0         0     0        0               0           0
-#> 6              0         0     0        0               0           0
-#> 7              0         0     0        0               0           0
-#> 8              0         0     0        0               0           0
-#>   Open Water Perennial Ice/Snow Developed/Open Space Developed/Low Intensity
-#> 1          0                  0                  224                      69
-#> 2          0                  0                   52                      95
-#> 3          0                  0                  208                       9
-#> 4          0                  0                  298                     367
-#> 5       1621                  0                  172                      95
-#> 6          0                  0                  299                     214
-#> 7          0                  0                  135                       1
-#> 8          0                  0                  162                       8
-#>   Developed/Med Intensity Developed/High Intensity Deciduous Forest
-#> 1                      22                        2              178
-#> 2                      45                        8              116
-#> 3                       2                        0             3264
-#> 4                     401                      137              474
-#> 5                      33                        0              391
-#> 6                      22                        4              236
-#> 7                       0                        0             3358
-#> 8                       1                        0             2217
-#>   Evergreen Forest Mixed Forest Grassland/Pasture Woody Wetlands
-#> 1               10           22               213              0
-#> 2                1           12               241              0
-#> 3                1           56                 9              0
-#> 4              106          303               806              0
-#> 5               35          692               415              5
-#> 6                6           56               437              0
-#> 7                9           37                 4              0
-#> 8              533          458                36              5
-#>   Herbaceous Wetlands Pistachios Triticale Carrots Asparagus Garlic Cantaloupes
-#> 1                   0          0         0       0         0      0           0
-#> 2                   0          0         2       0         0      0           0
-#> 3                   0          0         0       0         0      0           0
-#> 4                   0          0         1       0         0      0           0
-#> 5                   1          0         1       0         0      0           0
-#> 6                   0          0         0       0         0      0           0
-#> 7                   0          0         0       0         0      0           0
-#> 8                   0          0         0       0         0      0           0
-#>   Prunes Olives Oranges Honeydew Melons Broccoli Avocados Peppers Pomegranates
-#> 1      0      0       0               0        0        0       0            0
-#> 2      0      0       0               0        0        0       0            0
-#> 3      0      0       0               0        0        0       0            0
-#> 4      0      0       0               0        0        0       0            0
-#> 5      0      0       0               0        0        0       0            0
-#> 6      0      0       0               0        0        0       0            0
-#> 7      0      0       0               0        0        0       0            0
-#> 8      0      0       0               0        0        0       0            0
-#>   Nectarines Greens Plums Strawberries Squash Apricots Vetch
-#> 1          0      0     0            0      0        0     0
-#> 2          0      0     0            0      0        0     0
-#> 3          0      0     0            0      0        0     0
-#> 4          0      0     0            0      0        0     0
-#> 5          0      0     0            0      0        0     0
-#> 6          0      0     0            0      0        0     0
-#> 7          0      0     0            0      0        0     0
-#> 8          0      0     0            0      0        0     0
-#>   Dbl Crop WinWht/Corn Dbl Crop Oats/Corn Lettuce Dbl Crop Triticale/Corn
-#> 1                    0                  0       0                       0
-#> 2                    2                  0       0                       0
-#> 3                    0                  0       0                       0
-#> 4                    3                  0       0                       1
-#> 5                    0                  1       0                       0
-#> 6                    0                  0       0                       0
-#> 7                    0                  0       0                       0
-#> 8                    0                  0       0                       0
-#>   Pumpkins Dbl Crop Lettuce/Durum Wht Dbl Crop Lettuce/Cantaloupe
-#> 1        0                          0                           0
-#> 2        0                          0                           0
-#> 3        0                          0                           0
-#> 4        1                          0                           0
-#> 5        0                          0                           0
-#> 6        0                          0                           0
-#> 7        0                          0                           0
-#> 8        0                          0                           0
+#>   Fallow/Idle Cropland Forest Cherries Peaches Apples Grapes Christmas Trees
+#> 1                    0      0        0       0      0      0               0
+#> 2                    0      0        0       0      0      0               0
+#> 3                    0      0        0       0      0      0               0
+#> 4                    0      0        0       0      1      0               0
+#> 5                    0      0        0       0      0      0               0
+#> 6                    0      0        0       0      1      0               0
+#> 7                    0      0        0       0      0      0               0
+#> 8                    0      0        0       0      0      0               0
+#>   Other Tree Crops Citrus Pecans Almonds Walnuts Pears Clouds/No Data Developed
+#> 1                0      0      0       0       0     0              0         0
+#> 2                0      0      0       0       0     0              0         0
+#> 3                0      0      0       0       0     0              0         0
+#> 4                0      0      0       0       0     0              0         0
+#> 5                0      0      0       0       0     0              0         0
+#> 6                0      0      0       0       0     0              0         0
+#> 7                0      0      0       0       0     0              0         0
+#> 8                0      0      0       0       0     0              0         0
+#>   Water Wetlands Nonag/Undefined Aquaculture Open Water Perennial Ice/Snow
+#> 1     0        0               0           0          0                  0
+#> 2     0        0               0           0          0                  0
+#> 3     0        0               0           0          0                  0
+#> 4     0        0               0           0          0                  0
+#> 5     0        0               0           0       1621                  0
+#> 6     0        0               0           0          0                  0
+#> 7     0        0               0           0          0                  0
+#> 8     0        0               0           0          0                  0
+#>   Developed/Open Space Developed/Low Intensity Developed/Med Intensity
+#> 1                  224                      69                      22
+#> 2                   52                      95                      45
+#> 3                  208                       9                       2
+#> 4                  298                     367                     401
+#> 5                  172                      95                      33
+#> 6                  299                     214                      22
+#> 7                  135                       1                       0
+#> 8                  162                       8                       1
+#>   Developed/High Intensity Barren Deciduous Forest Evergreen Forest
+#> 1                        2      4              178               10
+#> 2                        8      0              116                1
+#> 3                        0      0             3264                1
+#> 4                      137      1              474              106
+#> 5                        0      7              391               35
+#> 6                        4      1              236                6
+#> 7                        0      0             3358                9
+#> 8                        0      7             2217              533
+#>   Mixed Forest Shrubland Grassland/Pasture Woody Wetlands Herbaceous Wetlands
+#> 1           22         0               213              0                   0
+#> 2           12         0               241              0                   0
+#> 3           56         0                 9              0                   0
+#> 4          303         1               806              0                   0
+#> 5          692         1               415              5                   1
+#> 6           56         1               437              0                   0
+#> 7           37         5                 4              0                   0
+#> 8          458         1                36              5                   0
+#>   Pistachios Triticale Carrots Asparagus Garlic Cantaloupes Prunes Olives
+#> 1          0         0       0         0      0           0      0      0
+#> 2          0         2       0         0      0           0      0      0
+#> 3          0         0       0         0      0           0      0      0
+#> 4          0         1       0         0      0           0      0      0
+#> 5          0         1       0         0      0           0      0      0
+#> 6          0         0       0         0      0           0      0      0
+#> 7          0         0       0         0      0           0      0      0
+#> 8          0         0       0         0      0           0      0      0
+#>   Oranges Honeydew Melons Broccoli Avocados Peppers Pomegranates Nectarines
+#> 1       0               0        0        0       0            0          0
+#> 2       0               0        0        0       0            0          0
+#> 3       0               0        0        0       0            0          0
+#> 4       0               0        0        0       0            0          0
+#> 5       0               0        0        0       0            0          0
+#> 6       0               0        0        0       0            0          0
+#> 7       0               0        0        0       0            0          0
+#> 8       0               0        0        0       0            0          0
+#>   Greens Plums Strawberries Squash Apricots Vetch Dbl Crop WinWht/Corn
+#> 1      0     0            0      0        0     0                    0
+#> 2      0     0            0      0        0     0                    2
+#> 3      0     0            0      0        0     0                    0
+#> 4      0     0            0      0        0     0                    3
+#> 5      0     0            0      0        0     0                    0
+#> 6      0     0            0      0        0     0                    0
+#> 7      0     0            0      0        0     0                    0
+#> 8      0     0            0      0        0     0                    0
+#>   Dbl Crop Oats/Corn Lettuce Dbl Crop Triticale/Corn Pumpkins
+#> 1                  0       0                       0        0
+#> 2                  0       0                       0        0
+#> 3                  0       0                       0        0
+#> 4                  0       0                       1        1
+#> 5                  1       0                       0        0
+#> 6                  0       0                       0        0
+#> 7                  0       0                       0        0
+#> 8                  0       0                       0        0
+#>   Dbl Crop Lettuce/Durum Wht Dbl Crop Lettuce/Cantaloupe
+#> 1                          0                           0
+#> 2                          0                           0
+#> 3                          0                           0
+#> 4                          0                           0
+#> 5                          0                           0
+#> 6                          0                           0
+#> 7                          0                           0
+#> 8                          0                           0
 #>   Dbl Crop Lettuce/Cotton Dbl Crop Lettuce/Barley Dbl Crop Durum Wht/Sorghum
 #> 1                       0                       0                          0
 #> 2                       0                       0                          0
@@ -853,11 +713,251 @@ centre_table_1000m
 #> 8       0         0      0           0                        0
 ```
 
+We can calculate additional statistics such as the area within the
+buffer for each site.
+
 ``` r
 Area_m2 <- rowSums(centre_table_1000m)*900
+```
+
+and turn our table into proportional cover of different land classes.
+
+``` r
 centre_table_1000m_prop <- centre_table_1000m/rowSums(centre_table_1000m)
 
 centre_table_1000m_prop <- cbind(Area_m2,centre_table_1000m_prop)
+centre_table_1000m_prop
+#>   Area_m2 Background        Corn Cotton Rice      Sorghum    Soybeans Sunflower
+#> 1 3195900          0 0.349197409      0    0 0.0033793298 0.287524641         0
+#> 2 3196800          0 0.328828829      0    0 0.0000000000 0.272522523         0
+#> 3 3194100          0 0.000000000      0    0 0.0000000000 0.000000000         0
+#> 4 3192300          0 0.018043417      0    0 0.0000000000 0.022554271         0
+#> 5 3194100          0 0.005071851      0    0 0.0002817695 0.001408848         0
+#> 6 3196800          0 0.248310811      0    0 0.0002815315 0.235360360         0
+#> 7 3194100          0 0.000000000      0    0 0.0000000000 0.000000000         0
+#> 8 3194100          0 0.025922795      0    0 0.0000000000 0.000000000         0
+#>   Peanuts Tobacco Sweet Corn Pop or Orn Corn Mint       Barley Durum Wheat
+#> 1       0       0          0               0    0 0.0000000000           0
+#> 2       0       0          0               0    0 0.0019707207           0
+#> 3       0       0          0               0    0 0.0000000000           0
+#> 4       0       0          0               0    0 0.0002819284           0
+#> 5       0       0          0               0    0 0.0000000000           0
+#> 6       0       0          0               0    0 0.0002815315           0
+#> 7       0       0          0               0    0 0.0000000000           0
+#> 8       0       0          0               0    0 0.0000000000           0
+#>   Spring Wheat Winter Wheat Other Small Grains Dbl Crop WinWht/Soybeans
+#> 1            0 0.0633624331                  0                        0
+#> 2            0 0.1252815315                  0                        0
+#> 3            0 0.0000000000                  0                        0
+#> 4            0 0.0019734987                  0                        0
+#> 5            0 0.0002817695                  0                        0
+#> 6            0 0.0067567568                  0                        0
+#> 7            0 0.0000000000                  0                        0
+#> 8            0 0.0000000000                  0                        0
+#>            Rye        Oats Millet Speltz Canola Flaxseed Safflower Rape Seed
+#> 1 0.0005632216 0.005632216      0      0      0        0         0         0
+#> 2 0.0019707207 0.038288288      0      0      0        0         0         0
+#> 3 0.0000000000 0.000000000      0      0      0        0         0         0
+#> 4 0.0000000000 0.000000000      0      0      0        0         0         0
+#> 5 0.0000000000 0.000000000      0      0      0        0         0         0
+#> 6 0.0000000000 0.000000000      0      0      0        0         0         0
+#> 7 0.0000000000 0.000000000      0      0      0        0         0         0
+#> 8 0.0000000000 0.000000000      0      0      0        0         0         0
+#>   Mustard     Alfalfa Other Hay/Non Alfalfa Camelina Buckwheat Sugarbeets
+#> 1       0 0.043931287           0.024781752        0         0          0
+#> 2       0 0.028153153           0.008164414        0         0          0
+#> 3       0 0.000000000           0.000000000        0         0          0
+#> 4       0 0.023118128           0.115590640        0         0          0
+#> 5       0 0.000563539           0.014088476        0         0          0
+#> 6       0 0.034909910           0.114583333        0         0          0
+#> 7       0 0.000000000           0.000000000        0         0          0
+#> 8       0 0.001127078           0.007044238        0         0          0
+#>      Dry Beans Potatoes Other Crops Sugarcane Sweet Potatoes Misc Vegs & Fruits
+#> 1 0.0121092650        0           0         0              0                  0
+#> 2 0.0332207207        0           0         0              0                  0
+#> 3 0.0000000000        0           0         0              0                  0
+#> 4 0.0000000000        0           0         0              0                  0
+#> 5 0.0002817695        0           0         0              0                  0
+#> 6 0.0000000000        0           0         0              0                  0
+#> 7 0.0000000000        0           0         0              0                  0
+#> 8 0.0000000000        0           0         0              0                  0
+#>   Watermelons Onions Cucumbers Chick Peas Lentils Peas     Tomatoes Caneberries
+#> 1           0      0         0          0       0    0 0.0000000000           0
+#> 2           0      0         0          0       0    0 0.0000000000           0
+#> 3           0      0         0          0       0    0 0.0000000000           0
+#> 4           0      0         0          0       0    0 0.0002819284           0
+#> 5           0      0         0          0       0    0 0.0002817695           0
+#> 6           0      0         0          0       0    0 0.0000000000           0
+#> 7           0      0         0          0       0    0 0.0000000000           0
+#> 8           0      0         0          0       0    0 0.0000000000           0
+#>   Hops Herbs Clover/Wildflowers Sod/Grass Seed Switchgrass Fallow/Idle Cropland
+#> 1    0     0                  0              0           0                    0
+#> 2    0     0                  0              0           0                    0
+#> 3    0     0                  0              0           0                    0
+#> 4    0     0                  0              0           0                    0
+#> 5    0     0                  0              0           0                    0
+#> 6    0     0                  0              0           0                    0
+#> 7    0     0                  0              0           0                    0
+#> 8    0     0                  0              0           0                    0
+#>   Forest Cherries Peaches       Apples Grapes Christmas Trees Other Tree Crops
+#> 1      0        0       0 0.0000000000      0               0                0
+#> 2      0        0       0 0.0000000000      0               0                0
+#> 3      0        0       0 0.0000000000      0               0                0
+#> 4      0        0       0 0.0002819284      0               0                0
+#> 5      0        0       0 0.0000000000      0               0                0
+#> 6      0        0       0 0.0002815315      0               0                0
+#> 7      0        0       0 0.0000000000      0               0                0
+#> 8      0        0       0 0.0000000000      0               0                0
+#>   Citrus Pecans Almonds Walnuts Pears Clouds/No Data Developed Water Wetlands
+#> 1      0      0       0       0     0              0         0     0        0
+#> 2      0      0       0       0     0              0         0     0        0
+#> 3      0      0       0       0     0              0         0     0        0
+#> 4      0      0       0       0     0              0         0     0        0
+#> 5      0      0       0       0     0              0         0     0        0
+#> 6      0      0       0       0     0              0         0     0        0
+#> 7      0      0       0       0     0              0         0     0        0
+#> 8      0      0       0       0     0              0         0     0        0
+#>   Nonag/Undefined Aquaculture Open Water Perennial Ice/Snow
+#> 1               0           0  0.0000000                  0
+#> 2               0           0  0.0000000                  0
+#> 3               0           0  0.0000000                  0
+#> 4               0           0  0.0000000                  0
+#> 5               0           0  0.4567484                  0
+#> 6               0           0  0.0000000                  0
+#> 7               0           0  0.0000000                  0
+#> 8               0           0  0.0000000                  0
+#>   Developed/Open Space Developed/Low Intensity Developed/Med Intensity
+#> 1           0.06308082            0.0194311462            0.0061954379
+#> 2           0.01463964            0.0267454955            0.0126689189
+#> 3           0.05860806            0.0025359256            0.0005635390
+#> 4           0.08401466            0.1034677192            0.1130532845
+#> 5           0.04846436            0.0267681037            0.0092983939
+#> 6           0.08417793            0.0602477477            0.0061936937
+#> 7           0.03803888            0.0002817695            0.0000000000
+#> 8           0.04564666            0.0022541561            0.0002817695
+#>   Developed/High Intensity       Barren Deciduous Forest Evergreen Forest
+#> 1             0.0005632216 0.0011264433       0.05012672     0.0028161081
+#> 2             0.0022522523 0.0000000000       0.03265766     0.0002815315
+#> 3             0.0000000000 0.0000000000       0.91969569     0.0002817695
+#> 4             0.0386241895 0.0002819284       0.13363406     0.0298844094
+#> 5             0.0000000000 0.0019723866       0.11017188     0.0098619329
+#> 6             0.0011261261 0.0002815315       0.06644144     0.0016891892
+#> 7             0.0000000000 0.0000000000       0.94618202     0.0025359256
+#> 8             0.0000000000 0.0019723866       0.62468301     0.1501831502
+#>   Mixed Forest    Shrubland Grassland/Pasture Woody Wetlands
+#> 1  0.006195438 0.0000000000       0.059983103    0.000000000
+#> 2  0.003378378 0.0000000000       0.067849099    0.000000000
+#> 3  0.015779093 0.0000000000       0.002535926    0.000000000
+#> 4  0.085424302 0.0002819284       0.227234282    0.000000000
+#> 5  0.194984503 0.0002817695       0.116934348    0.001408848
+#> 6  0.015765766 0.0002815315       0.123029279    0.000000000
+#> 7  0.010425472 0.0014088476       0.001127078    0.000000000
+#> 8  0.129050437 0.0002817695       0.010143702    0.001408848
+#>   Herbaceous Wetlands Pistachios    Triticale Carrots Asparagus Garlic
+#> 1        0.0000000000          0 0.0000000000       0         0      0
+#> 2        0.0000000000          0 0.0005630631       0         0      0
+#> 3        0.0000000000          0 0.0000000000       0         0      0
+#> 4        0.0000000000          0 0.0002819284       0         0      0
+#> 5        0.0002817695          0 0.0002817695       0         0      0
+#> 6        0.0000000000          0 0.0000000000       0         0      0
+#> 7        0.0000000000          0 0.0000000000       0         0      0
+#> 8        0.0000000000          0 0.0000000000       0         0      0
+#>   Cantaloupes Prunes Olives Oranges Honeydew Melons Broccoli Avocados Peppers
+#> 1           0      0      0       0               0        0        0       0
+#> 2           0      0      0       0               0        0        0       0
+#> 3           0      0      0       0               0        0        0       0
+#> 4           0      0      0       0               0        0        0       0
+#> 5           0      0      0       0               0        0        0       0
+#> 6           0      0      0       0               0        0        0       0
+#> 7           0      0      0       0               0        0        0       0
+#> 8           0      0      0       0               0        0        0       0
+#>   Pomegranates Nectarines Greens Plums Strawberries Squash Apricots Vetch
+#> 1            0          0      0     0            0      0        0     0
+#> 2            0          0      0     0            0      0        0     0
+#> 3            0          0      0     0            0      0        0     0
+#> 4            0          0      0     0            0      0        0     0
+#> 5            0          0      0     0            0      0        0     0
+#> 6            0          0      0     0            0      0        0     0
+#> 7            0          0      0     0            0      0        0     0
+#> 8            0          0      0     0            0      0        0     0
+#>   Dbl Crop WinWht/Corn Dbl Crop Oats/Corn Lettuce Dbl Crop Triticale/Corn
+#> 1         0.0000000000       0.0000000000       0            0.0000000000
+#> 2         0.0005630631       0.0000000000       0            0.0000000000
+#> 3         0.0000000000       0.0000000000       0            0.0000000000
+#> 4         0.0008457852       0.0000000000       0            0.0002819284
+#> 5         0.0000000000       0.0002817695       0            0.0000000000
+#> 6         0.0000000000       0.0000000000       0            0.0000000000
+#> 7         0.0000000000       0.0000000000       0            0.0000000000
+#> 8         0.0000000000       0.0000000000       0            0.0000000000
+#>       Pumpkins Dbl Crop Lettuce/Durum Wht Dbl Crop Lettuce/Cantaloupe
+#> 1 0.0000000000                          0                           0
+#> 2 0.0000000000                          0                           0
+#> 3 0.0000000000                          0                           0
+#> 4 0.0002819284                          0                           0
+#> 5 0.0000000000                          0                           0
+#> 6 0.0000000000                          0                           0
+#> 7 0.0000000000                          0                           0
+#> 8 0.0000000000                          0                           0
+#>   Dbl Crop Lettuce/Cotton Dbl Crop Lettuce/Barley Dbl Crop Durum Wht/Sorghum
+#> 1                       0                       0                          0
+#> 2                       0                       0                          0
+#> 3                       0                       0                          0
+#> 4                       0                       0                          0
+#> 5                       0                       0                          0
+#> 6                       0                       0                          0
+#> 7                       0                       0                          0
+#> 8                       0                       0                          0
+#>   Dbl Crop Barley/Sorghum Dbl Crop WinWht/Sorghum Dbl Crop Barley/Corn
+#> 1                       0            0.0000000000                    0
+#> 2                       0            0.0000000000                    0
+#> 3                       0            0.0000000000                    0
+#> 4                       0            0.0002819284                    0
+#> 5                       0            0.0000000000                    0
+#> 6                       0            0.0000000000                    0
+#> 7                       0            0.0000000000                    0
+#> 8                       0            0.0000000000                    0
+#>   Dbl Crop WinWht/Cotton Dbl Crop Soybeans/Cotton Dbl Crop Soybeans/Oats
+#> 1                      0                        0                      0
+#> 2                      0                        0                      0
+#> 3                      0                        0                      0
+#> 4                      0                        0                      0
+#> 5                      0                        0                      0
+#> 6                      0                        0                      0
+#> 7                      0                        0                      0
+#> 8                      0                        0                      0
+#>   Dbl Crop Corn/Soybeans Blueberries Cabbage Cauliflower Celery Radishes
+#> 1                      0           0       0           0      0        0
+#> 2                      0           0       0           0      0        0
+#> 3                      0           0       0           0      0        0
+#> 4                      0           0       0           0      0        0
+#> 5                      0           0       0           0      0        0
+#> 6                      0           0       0           0      0        0
+#> 7                      0           0       0           0      0        0
+#> 8                      0           0       0           0      0        0
+#>   Turnips Eggplants Gourds Cranberries Dbl Crop Barley/Soybeans
+#> 1       0         0      0           0                        0
+#> 2       0         0      0           0                        0
+#> 3       0         0      0           0                        0
+#> 4       0         0      0           0                        0
+#> 5       0         0      0           0                        0
+#> 6       0         0      0           0                        0
+#> 7       0         0      0           0                        0
+#> 8       0         0      0           0                        0
+```
+
+## Write out shapefiles
+
+we can write out vector data to shapefiles using `st_write()`
+
+``` r
+st_write(centre_sites, "data/centre_sites.shp")
+#> Writing layer `centre_sites' to data source 
+#>   `data/centre_sites.shp' using driver `ESRI Shapefile'
+#> Writing 8 features with 1 fields and geometry type Point.
+st_write(centre_sites_1000m, "data/centre_sites_buffer_1000m.shp")
+#> Writing layer `centre_sites_buffer_1000m' to data source 
+#>   `data/centre_sites_buffer_1000m.shp' using driver `ESRI Shapefile'
+#> Writing 8 features with 1 fields and geometry type Polygon.
 ```
 
 ## Check your learning
@@ -865,6 +965,12 @@ centre_table_1000m_prop <- cbind(Area_m2,centre_table_1000m_prop)
 1.  Using beeshiny, extract the CDL values for 1km around the centre
     county points for the same year of the CDL that you used in the last
     activity.
+
+2.  Compare the CDL values from beeshiny for the centre county sites to
+    the values you produced using the extract function above. Values
+    should be similar but not exacly the same because beeshiny uses
+    exactextractr (`?exact_extract`) instead of the `terra::extract`
+    function.
 
 # Working with climate data
 
