@@ -34,8 +34,6 @@ For data wrangling and visualizations we will use `dplyr`, `ggplot2` and `tidyte
 | `terra` | Package for spatial data analysis | https://rspatial.github.io/terra/ |
 | `tidyterra` | Package for integrating objects from `terra` with the `dplyr` and `ggplot2` packages | https://dieghernan.github.io/tidyterra/ |
 
-Because some spatial functions have the same names as dplyr functions it is helpful to load the spatial packages last. We can also use the `::` to specify the package for function calls. 
-
 Unhash (remove the preceding `#`) and use install.packages for any packages your may not already have installed
 
 ```{r packages, echo=TRUE, results='hide', message=FALSE}
