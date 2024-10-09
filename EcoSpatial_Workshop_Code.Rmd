@@ -204,6 +204,15 @@ summary(values(centre_floral_sp, na.rm=TRUE))    # make a summary with the quart
 hist(values(centre_floral_sp, na.rm=TRUE))       # make a basic histogram of values
 ```
 
+## Write out raster files
+
+We can save our raster files as a .tif using `writeRaster`. For the CDL raster we will save the data in "INT1U" format which will also save the class names and color table. 
+
+```{r write_raster}
+writeRaster(county_cdl, "data/centre_county_cdl_2015.tif", overwrite=TRUE, datatype="INT1U")
+
+writeRaster(county_floral_sp, "data/centre_county_springfloral_2015.tif", overwrite=TRUE)
+```
 
 ## Check your learning
 
@@ -227,20 +236,39 @@ hist(values(centre_floral_sp, na.rm=TRUE))       # make a basic histogram of val
 
 ```
 
-# Working with point data
+# Working with vector (points and polygons) data
 
 ## Read in point data
 
+Often we collect and store point data as coordinates in a non-spatial format such as a csv file which we need to convert into a spatial object in R. 
+
+In the /data directory you should find a csv file with a set of points from Centre County Pa. We will read in and inspect these data.
 ```{r read in pts}
 centre_sites <- read.csv("data/centre_co_pts.csv")
-centre_sites <- st_as_sf(centre_sites, coords=c("Long","Lat"), 
+centre_sites
+```
+
+and convert them into an sf spatial object. We use the `coords=` argument to indicate the columns that hold the longitude (X) and latitude (Y). We can also specify the CRS using the 'crs=' arguments and the appropriate EPSG code or other crs object. In our case we will give the EPSG code 4326 which corresponds to WGS 84, the system commonly used by Google Earth. 
+```{r make pts spatial}
+centre_sites <- st_as_sf(centre_sites, 
+                         coords=c("Long","Lat"), #indicate the x and y columns
                          crs = 4326) #set the crs
+```
+
+when we inspect the center_sites object we see that there is now additional information at the top. 
+```{r inspect sf pts}
 centre_sites
 ```
 
 
 ## Visualize point data
+
+Using `ggplot2` and `sf` we can add our points to our earlier map of Centre county with the `geom_sf()` function. 
+
 ```{r}
+#Centre county CDL from raster exercise
+centre_cdl <- rast("data/centre_county_cdl_2015.tif") 
+
 ggplot()+
   geom_spatraster(data = centre_cdl, aes(fill = CLASS_NAME)) +
   geom_sf(data=centre_sites) + 
@@ -252,10 +280,14 @@ ggplot()+
 
 ## Buffer around points
 
+We can create a polygon object from our points by buffering around them in a 1000m radius. For example, we might do this when assessing land cover values around a site.
 ```{r}
 centre_sites_1000m <- st_buffer(centre_sites, 1000)
+centre_sites_1000m
 ```
 
+
+We can visualize this buffer by adding it to our plot. Note you may need to expand your plot size to see the buffers behind the points. 
 ```{r}
 ggplot()+
   geom_spatraster(data = centre_cdl, aes(fill = CLASS_NAME)) +
@@ -269,22 +301,40 @@ ggplot()+
 
 
 ## Extract CDL values within buffers
-```{r}
+
+If we wanted to assess land cover around a site in a way that is similar to the results that beeshiny provides, we can use the `extract()` function from terra. First providing the raster we want to extract values from, then the sf object that defines the zones in which the raster will the summarized. 
+```{r extract}
 centre_table_1000m <- extract(centre_cdl, centre_sites_1000m, fun="table", ID=F)
 centre_table_1000m
 ```
 
-```{r}
+We can calculate additional statistics such as the area within the buffer for each site. 
+```{r area}
 Area_m2 <- rowSums(centre_table_1000m)*900
+```
+
+and turn our table into proportional cover of different land classes. 
+```{r}
 centre_table_1000m_prop <- centre_table_1000m/rowSums(centre_table_1000m)
 
 centre_table_1000m_prop <- cbind(Area_m2,centre_table_1000m_prop)
+centre_table_1000m_prop
 ```
+
+## Write out shapefiles
+we can write out vector data to shapefiles using `st_write()`
+```{r}
+st_write(centre_sites, "data/centre_sites.shp")
+st_write(centre_sites_1000m, "data/centre_sites_buffer_1000m.shp")
+```
+
 
 
 ## Check your learning
 
 1. Using beeshiny, extract the CDL values for 1km around the centre county points for the same year of the CDL that you used in the last activity. 
+
+2. Compare the CDL values from beeshiny for the centre county sites to the values you produced using the extract function above. Values should be similar but not exacly the same because beeshiny uses exactextractr (`?exact_extract`) instead of the `terra::extract` function. 
 
 # Working with climate data
 
