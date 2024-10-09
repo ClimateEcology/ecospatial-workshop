@@ -1,4 +1,4 @@
-CDL_2021_FIPS_42027.tif
+/data/CDL_2021_FIPS_42027.tif
 centre_sites.dbf
 centre_sites.prj
 centre_sites.shp
@@ -7,5 +7,3 @@ centre_sites_buffer_1000m.dbf
 centre_sites_buffer_1000m.prj
 centre_sites_buffer_1000m.shp
 centre_sites_buffer_1000m.shx
-centre_county_cdl_2015*
-centre_county_springfloral_2015*
