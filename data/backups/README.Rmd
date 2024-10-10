@@ -1,0 +1,44 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  warning = FALSE, 
+  message = FALSE
+)
+```
+
+# EcoSpatial Summit Workshop
+
+## Install R and RStudio
+
+In preparation for the EcoSpatial Summit Workshop, please download the following programs:
+
+* [R](https://cran.rstudio.com/)
+
+* [RStudio](https://posit.co/download/rstudio-desktop/)
+
+## Download this repository
+
+To download the contents of this repository, click on the green **<> Code** button and select **Download ZIP**. Unzip the downloaded zip file and save the folder to your computer.
+
+![](README_files/figure/downloadcode.png?raw=true){width="50%"}
+
+## Install packages
+
+With R and RStudio installed, open the file `ecospatial-workshops.Rproj` in the downloaded folder. This starts RStudio. Within the console window in the lower left, run the following lines to install the R packages needed for this workshop.
+
+```{r packages, echo=TRUE, results='hide', message=FALSE, eval = FALSE}
+install.packages("dplyr", dependencies = TRUE)
+install.packages("ggplot2", dependencies = TRUE)
+install.packages("sf", dependencies = TRUE)
+install.packages("terra", dependencies = TRUE)
+install.packages("tidyterra", dependencies = TRUE)
+install.packages("SPEI", dependencies = TRUE)
+install.packages("tidyr", dependencies = TRUE)
+```
