@@ -1,0 +1,360 @@
+---
+title: "EcoSpatial Workshop: Working with Weather Data"
+author: "Sarah Goslee"
+date: "2024-10-10"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+    number_sections: true
+    code_folding: show
+    fig_width: 9
+    fig_height: 7
+---
+
+The BeeShiny tool offers downloads of weather data that match the extent of the other spatial data requested.
+
+Currently, BeeShiny only offers [monthly PRISM data](https://prism.oregonstate.edu/) on a 4km grid for mininum and maximum daily temperature and daily precipitation, but this will be expanded to daily data, and likely to other datasets and variables.
+
+This tutorial will demonstrate:
+
+  - loading the downloaded data into R
+  - visualing the weather data using `ggplot2`
+  - calculating biologically relevant indices, in this case BIOCLIM
+
+
+# Packages 
+
+This tutorial uses the dismo, SPEI, and ggplot2 packages, and requires sp and raster as dependencies.
+
+```{r packages}
+
+    library(ggplot2)
+    library(SPEI)
+
+```
+
+
+# Data
+
+We will compare weather for six cities across the US. The CSV file _cities.weather.csv_ can be downloaded from BeeShiny, or can be obtained from the _data_ folder in the GitHub repo.
+
+## BeeShiny
+
+The file _cities.csv_ should contain:
+
+```
+City,Lat,Long
+Orlando,28.5384,-81.3789
+StateCollege,40.7934,-77.8600
+Burlington,44.4759,-73.2121
+Lincoln,40.8137,-96.7026
+Albuquerque,35.0844,-106.6504
+Seattle,47.6061,-122.3328
+```
+
+To create the weather dataset:
+
+  1. Access the [BeeShiny server](https://beesuite.psu.edu/beeshiny).
+  2. Choose "Upload coordinates csv" and upload _cities.csv_. 
+  3. Choose Long as the X coordinate column, Lat as the Y coordinate column and City as the Coordinate ID.
+  4. On the Choose variables tab, select Precipitation, Maximum Temperature, Minimum temperature, and all years in the dropdown.
+  5. On the Query & View Data tab, Make Query and Download selected data.
+  6. Move the downloaded _data.zip_ file to your working directory. Uncompress the _data.zip_ file, and rename _weather.csv_ to _cities.weather.csv_.
+
+If you've done step 6 or downloaded the extracted file from the GitHub repo `data` folder, use `read.csv()` to load the file directly.
+
+```{r data1}
+
+    weather <- read.csv("data/cities.weather.csv")
+
+```
+
+Bonus trick: R can read a file directly from a zipped archive, and it can also let you specify a file location. You don't need to try both (but of course you can if you want!); `weather` will be identical either way. 
+
+
+```{r readzip}
+
+    # weather <- read.csv(unz(file.choose(), "weather.csv"))
+
+```  
+
+## Data organization
+
+ 
+The data file contains monthly temperature and precipitation for six cities, from 2008 to 2023. The plain data frame isn't the most useful way to work with time series data.
+
+For daily data, `as.Date()` is an effective way to create a time series. Other more complex formats like _POSIXct_ are useful when time information is also needed. Since these data are monthly, let's arbitrarily choose the 15th of the month as the day of record.
+
+Another option would be to create a variable for consecutive months from 2008-01 to 2023-12, but using a date or date/time type makes available more tools for formatting and date/time arithmetic.
+
+By default, R plots will put the cities into alphabetical order. Turning `City` into an ordered factor will allow for custom organization.
+
+
+```{r dataorganization}
+
+    weather$date <- with(weather, as.Date(paste(year, month, "15"), format = "%Y %m %d"))
+
+
+    # examples of date formatting
+    # see ?strptime for a thorough list of possibilities
+    head(format(weather$date, "%b %Y"))
+    head(format(weather$date, "%B %Y"))
+
+    # set order for cities
+    weather$City <- factor(weather$City, ordered = TRUE, levels = with(weather, unique(City[order(Long)])))
+
+
+    # daily mean temperature can be useful
+    weather$tmean <- with(weather, (tmin + tmax) / 2)
+
+```
+
+Temperature is often displayed as a line graph, and precipitation as a bar graph showing the total. 
+
+```{r overviewplots}
+
+    ggplot(weather, aes(x = date, y = tmean, color = City)) +
+        labs(x = "Date", y = "Temperature (C)", title = "Mean temperature") +
+        geom_line()
+
+    ggplot(weather, aes(x = date, y = pr, fill = City)) +
+        labs(x = "Date", y = "Precipitation (mm)", title = "Monthly precipitation") +
+        geom_bar(pos = "dodge", stat = "identity")
+
+```
+
+That isn't particularly helpful for comparing cities, though. 
+
+What about a boxplot of precipitation by year?
+
+First, calculate the annual sum of precipitation for each city and year, then plot the values.
+
+```{r precip}
+
+    prcp <- aggregate(pr ~ year + City, data = weather, FUN = "sum")
+
+    ggplot(prcp, aes(x = City, y = pr, fill = City)) +
+        labs(x = "Date", y = "Precipitation (mm)", title = "Annual precipitation") +
+        geom_boxplot()
+
+```
+
+A third common display for weather data is a combined plot of mean temperature and precipitation together. That takes a few more steps in `ggplot2`, but is entirely feasible. The trickiest part putting both on the same scale to get the double y axes.
+
+```{r combined}
+
+    monthly <- aggregate(. ~ month + City, data = subset(weather, select = c(City, month, pr, tmax, tmin)), FUN = "mean")
+
+    temp.range <- with(monthly, range(c(tmin, tmax)))
+    pr.range   <- range(monthly$pr)
+
+    b <- diff(pr.range)/diff(temp.range)
+    a <- pr.range[1] - b * temp.range[1]
+
+    ggplot(monthly) +
+        geom_bar(aes(x =  month, y = pr), stat = "identity", fill = "darkgreen") +
+        geom_line(aes(x = month, y = a + tmin * b, color = "blue", linewidth = 2)) +
+        geom_line(aes(x = month, y = a + tmax * b, color = "red", linewidth = 2)) +
+        scale_y_continuous("Precipitation (mm)", sec.axis = sec_axis(~ (. - a)/b, name = "Temperature (C)")) +
+        scale_x_continuous("Month", breaks = 1:12, labels = month.abb) +
+        facet_wrap( ~City) +
+        theme(legend.position = "none")
+
+```
+
+
+# Weather and climate indices
+
+Often simply temperature and precipitation are not useful enough, and we want some indices that are biologically relevant for the organisms of interest. 
+
+## BIOCLIM
+
+One commonly-used set of indices is the BIOCLIM variables, which are:
+
+
+  - bc01	Annual Mean Temperature
+  - bc02	Mean Diurnal Range (Mean of monthly (max temp - min temp))
+  - bc03	Isothermality (BIO2/BIO7) (* 100)
+  - bc04	Temperature Seasonality (standard deviation * 100)
+  - bc05	Max Temperature of Warmest Month
+  - bc06	Min Temperature of Coldest Month
+  - bc07	Temperature Annual Range (BIO5-BIO6)
+  - bc08	Mean Temperature of Wettest Quarter
+  - bc09	Mean Temperature of Driest Quarter
+  - bc10	Mean Temperature of Warmest Quarter
+  - bc11	Mean Temperature of Coldest Quarter
+  - bc12	Annual Precipitation
+  - bc13	Precipitation of Wettest Month
+  - bc14	Precipitation of Driest Month
+  - bc15	Precipitation Seasonality (Coefficient of Variation)
+  - bc16	Precipitation of Wettest Quarter
+  - bc17	Precipitation of Driest Quarter
+  - bc18	Precipitation of Warmest Quarter
+  - bc19	Precipitation of Coldest Quarter
+
+where a "quarter" is any consecutive three months. Most commonly, each year is wrapped around, so a quarter might be Dec-Jan-Feb, where December and January are both 2023, rather than December 2023 and January 2024. That makes it possible to calculate these indices for a single year. It's what we will do here, as is conventional, but you might want to use continuous months for other applications.
+
+I previously used the [climates](https://github.com/jjvanderwal/climates) package, but it has as dependencies several packages that are no longer on CRAN, so I've provided you a function.
+
+There's another package function, `dismo::bioclim()` that does something related but different.
+
+
+```{r bioclim}
+
+    source("bioclim.R")
+
+    # calculate bioclim variables for one city
+    statecollege.bioclim <- bioclim(subset(weather, City == "StateCollege"))
+
+    ###
+
+    # calculate bioclim variables for each city
+    all.bioclim <- lapply(split(weather, weather$City), bioclim)
+
+    # create a long-form data frame for plotting
+    all.bioclim <- lapply(seq_along(all.bioclim), function(i) {
+        all.bioclim[[i]]$City <- names(all.bioclim)[i]
+        all.bioclim[[i]]
+    })
+    all.bioclim <- do.call(rbind.data.frame, all.bioclim)
+    all.bioclim$City <- factor(all.bioclim$City, ordered = TRUE, levels = levels(weather$City))
+
+    all.bioclim.long <- tidyr::pivot_longer(all.bioclim, cols = 2:20)
+    
+
+    # plot the variables for each city
+    ggplot(all.bioclim.long, aes(x = City, y = value, fill = City)) +
+        labs(x = "City", y = "BIOCLIM Value") +
+        geom_boxplot() + 
+        facet_wrap( ~name, scales = "free") +
+        theme(axis.text.x = element_blank())
+
+
+```
+
+
+## SPEI
+
+Drought is a concern in many parts of the US (alongside flooding!), and the [SPEI drought index](https://spei.csic.es/) is commonly used to quantify drought at multiple timescales, here 1, 6, and 12 months lag.
+
+The SPEI package includes functions for calculating SPEI, as well as several potential evapotranspiration methods and a few other things.
+
+```{r spei, results='hide'}
+     
+    # for each city, calculate PET and water balance
+    # and then three different SPEI values
+    # save the SPEI values in a list
+    
+    weather$PET <- NA
+    weather$BAL <- NA
+    weather$SPEI01 <- weather$SPEI06 <- weather$SPEI12 <- NA
+
+    for(thiscity in unique(weather$City)) {
+
+        # simplest form of PET calculation
+        thispet <- with(subset(weather, City == thiscity), 
+                thornthwaite(tmean, Lat[1]))
+        thisbal <- with(subset(weather, City == thiscity),
+                pr - thispet)
+
+        # save those results
+        weather$PET[weather$City == thiscity] <- thispet
+        weather$BAL[weather$City == thiscity] <- thisbal
+
+        # calculate the SPEI values
+        thisspei01 <- spei(thisbal,  1)
+        thisspei03 <- spei(thisbal,  3)
+        thisspei12 <- spei(thisbal, 12)
+        thisspei36 <- spei(thisbal, 36)
+
+        # save just the fitted values for plotting
+        weather$SPEI01[weather$City == thiscity] <- thisspei01$fitted
+        weather$SPEI03[weather$City == thiscity] <- thisspei03$fitted
+        weather$SPEI12[weather$City == thiscity] <- thisspei12$fitted
+
+    }
+
+    # clean up, if desired
+    rm(list = ls(pattern = "^this"))
+
+```
+
+
+The plot method for SPEI uses base graphics rather than `ggplot2`. 
+
+*Note:* The base plot method is currently broken, so the above code chunk saves the fitted values from the SPEI objects so we can use `ggplot2` for graphics. 
+
+
+```{r speiplot}
+
+    # add a column for positive/negative SPEI for coloring the bar plots
+    weather$POS01 <- weather$SPEI01 >= 0
+    weather$POS03 <- weather$SPEI03 >= 0
+    weather$POS12 <- weather$SPEI12 >= 0
+
+
+
+    ggplot(weather, aes(x = date, y = SPEI01, fill = POS01)) +
+        labs(x = "Date", y = "SPEI", title = "SPEI: 1 Month Lag") +
+        geom_bar(pos = "dodge", stat = "identity") + 
+        facet_wrap( ~City) +
+        theme(legend.position = "none")
+
+    ggplot(weather, aes(x = date, y = SPEI12, fill = POS12)) +
+        labs(x = "Date", y = "SPEI", title = "SPEI: 12 Month Lag") +
+        geom_bar(pos = "dodge", stat = "identity") + 
+        facet_wrap( ~City) +
+        theme(legend.position = "none")
+    
+```
+
+# The importance of scale
+
+But... I thought the Southwest was experiencing a prolonged drought?
+
+Yes, but from the perspective of the 2008-2023 timeperiod, not as noticeably. 
+
+A longer timespan might show something different. This example also demonstrates how to aggregate daily to monthly values before calculating SPEI or BIOCLIM indices.
+
+The file _abq.ghcn.RDS_ contains daily weather data for the Albuquerque, NM airport from [GHCN](https://www.ncei.noaa.gov/products/land-based-station/global-historical-climatology-network-daily). The column headings are the GNCN standard, but extraneous columns have been removed and the data trimmed to 1932-2023.
+
+
+```{r abq, results='hide'}
+
+    # load and clean up data
+    abq <- readRDS("abq.ghcn.RDS")
+    abq$TMEAN.VALUE <- with(abq, (TMIN.VALUE + TMAX.VALUE) / 2)
+
+    # precipitation is sum; temperature is mean!
+    abq.monthly.prcp <- aggregate(PRCP.VALUE ~ MONTH + YEAR, data = abq, FUN = "sum", na.rm = TRUE)
+    abq.monthly.temp <- aggregate(TMEAN.VALUE ~ MONTH + YEAR, data = abq, FUN = "mean", na.rm = TRUE)
+
+    thispet <- thornthwaite(abq.monthly.temp$TMEAN.VALUE, lat = 35.0419)
+    thisbal <- abq.monthly.prcp$PRCP.VALUE - thispet
+
+    abq.spei12 <- spei(thisbal, 12)
+
+
+    abq.monthly <- data.frame(abq.monthly.temp, PRCP.VALUE = abq.monthly.prcp$PRCP.VALUE,
+        SPEI12 = abq.spei12$fitted,
+        POS12 = abq.spei12$fitted >= 0)
+    abq.monthly$date <- with(abq.monthly, as.Date(paste(YEAR, MONTH, "15"), format = "%Y %m %d"))
+
+    ggplot(abq.monthly, aes(x = date, y = SPEI12, fill = POS12)) +
+        labs(x = "Date", y = "SPEI", title = "Albuquerque SPEI: 12 Month Lag") +
+        geom_bar(pos = "dodge", stat = "identity") + 
+        theme(legend.position = "none")
+
+
+```
+
+
+# Check your learning
+
+  - Calculate monthly minimum and maximum temperatures for Albuquerque.
+  - Plot the monthly weather variables for Albuquerque.
+  - Calculate the BIOCLIM variables for the longer Albuquerque time series. There is no help file, but you can use 
+    `args(bioclim)` to see the function arguments. Pay attention to the column names!
+
+    

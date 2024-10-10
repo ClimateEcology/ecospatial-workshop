@@ -328,8 +328,6 @@ st_write(centre_sites, "data/centre_sites.shp", delete_layer = TRUE)
 st_write(centre_sites_1000m, "data/centre_sites_buffer_1000m.shp", delete_layer = TRUE)
 ```
 
-
-
 ## Check your learning
 
 1. Using beeshiny, extract the CDL values for 1km around the centre county points for the same year of the CDL that you used in the last activity. 
