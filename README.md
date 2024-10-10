@@ -18,11 +18,7 @@ To download the contents of this repository, click on the green “\<\>
 Code” button and select “Download ZIP”. Unzip the downloaded zip file
 and save the folder inside.
 
-<figure>
-<img src="README_files/figure-gfm/downloadcode.png?raw=true"
-alt="Download code" />
-<figcaption aria-hidden="true">Download code</figcaption>
-</figure>
+![](README_files/figure/downloadcode.png?raw=true)
 
 ## Install packages
 
