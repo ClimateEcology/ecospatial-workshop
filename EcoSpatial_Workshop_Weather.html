@@ -1599,7 +1599,7 @@ requires sp and raster as dependencies.</p>
 <h1><span class="header-section-number">2</span> Data</h1>
 <p>We will compare weather for six cities across the US. The CSV file
 <em>cities.weather.csv</em> can be downloaded from BeeShiny, or can be
-obtained from the <em>data</em> folder in the GitHub repo.</p>
+obtained from the <em>data/backups</em> folder in the GitHub repo.</p>
 <div id="beeshiny" class="section level2" number="2.1">
 <h2><span class="header-section-number">2.1</span> BeeShiny</h2>
 <p>The file <em>cities.csv</em> should contain:</p>
@@ -1626,9 +1626,8 @@ directory. Uncompress the <em>data.zip</em> file, and rename
 <em>weather.csv</em> to <em>cities.weather.csv</em>.</li>
 </ol>
 <p>If you’ve done step 6 or downloaded the extracted file from the
-GitHub repo <code>data</code> folder, use <code>read.csv()</code> to
-load the file directly.</p>
-<pre class="r"><code>    weather &lt;- read.csv(&quot;data/cities.weather.csv&quot;)</code></pre>
+GitHub repo, use <code>read.csv()</code> to load the file directly.</p>
+<pre class="r"><code>    weather &lt;- read.csv(&quot;cities.weather.csv&quot;)</code></pre>
 <p>Bonus trick: R can read a file directly from a zipped archive, and it
 can also let you specify a file location. You don’t need to try both
 (but of course you can if you want!); <code>weather</code> will be
@@ -1901,6 +1900,12 @@ series. There is no help file, but you can use
 <code>args(bioclim)</code> to see the function arguments. Pay attention
 to the column names!</li>
 </ul>
+<div id="data-availability-feedback" class="section level2" number="5.1">
+<h2><span class="header-section-number">5.1</span> Data availability
+feedback</h2>
+<p>If you’re following along in the workshop, use this opportunity to
+give us your <strong>feedback on data availability</strong>!</p>
+</div>
 </div>
 
 

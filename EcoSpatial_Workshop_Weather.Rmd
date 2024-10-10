@@ -25,7 +25,7 @@ This tutorial will demonstrate:
 
 # Packages 
 
-This tutorial uses the dismo, SPEI, and ggplot2 packages, and requires sp and raster as dependencies.
+This tutorial uses the `tidyr`, `SPEI`, and `ggplot2` packages, and requires `sp` and `raster` as dependencies.
 
 ```{r packages}
 
@@ -37,7 +37,7 @@ This tutorial uses the dismo, SPEI, and ggplot2 packages, and requires sp and ra
 
 # Data
 
-We will compare weather for six cities across the US. The CSV file _cities.weather.csv_ can be downloaded from BeeShiny, or can be obtained from the _data_ folder in the GitHub repo.
+We will compare weather for six cities across the US. The CSV file _cities.weather.csv_ can be downloaded from BeeShiny, or can be obtained from the _data/backups_ folder in the GitHub repo.
 
 ## BeeShiny
 
@@ -62,11 +62,11 @@ To create the weather dataset:
   5. On the Query & View Data tab, Make Query and Download selected data.
   6. Move the downloaded _data.zip_ file to your working directory. Uncompress the _data.zip_ file, and rename _weather.csv_ to _cities.weather.csv_.
 
-If you've done step 6 or downloaded the extracted file from the GitHub repo `data` folder, use `read.csv()` to load the file directly.
+If you've done step 6 or downloaded the extracted file from the GitHub repo, use `read.csv()` to load the file directly.
 
 ```{r data1}
 
-    weather <- read.csv("data/cities.weather.csv")
+    weather <- read.csv("cities.weather.csv")
 
 ```
 
@@ -357,4 +357,7 @@ The file _abq.ghcn.RDS_ contains daily weather data for the Albuquerque, NM airp
   - Calculate the BIOCLIM variables for the longer Albuquerque time series. There is no help file, but you can use 
     `args(bioclim)` to see the function arguments. Pay attention to the column names!
 
+## Data availability feedback
+
+If you're following along in the workshop, use this opportunity to give us your **feedback on data availability**!
     

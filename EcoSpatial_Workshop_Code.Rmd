@@ -74,6 +74,10 @@ library(terra)
 library(tidyterra)
 ```
 
+## About yourself and use cases
+
+If you're following along in the workshop, use this opportunity to give us your **feedback on yourself and your common use cases**!
+
 # Working with raster data in R
 
 ## Get raster data from beeshiny
@@ -84,12 +88,12 @@ Use [**beeshiny**](https://beesuite.psu.edu/beeshiny/) to download the cropland 
 
 Downloaded data from beeshiny is packaged as a zipped file called data.zip. Inside this file you should have a .tif file. The name indicates the data type, in this case CDL, the year and the FIPS code that corresponds to the county you selected. 
 
-**For the code below to work, you must move the .tif file into the `/data` folder in your ecospatial-workshop directory.**
+**For the code below to work, you must move the .tif file into the _/data_ folder in your ecospatial-workshop directory.**
 
-The first thing we will do is use the `rast()` function to read the .tif file into R as a `SpatRaster` object. NOTE: if you aren't able to download the raster from beeshiny, you can access a pre-downloaded copy in the `data/backups/` folder.
+The first thing we will do is use the `rast()` function to read the .tif file into R as a `SpatRaster` object. NOTE: if you aren't able to download the raster from beeshiny, you can access a pre-downloaded copy in the _data/backups/_ folder.
 
 ```{r create SpatRaster of cdl}
-centre_cdl <- rast("data/CDL_2021_FIPS_42027.tif")    # add `backup/` after data to use backup data
+centre_cdl <- rast("data/CDL_2021_FIPS_42027.tif")    # add 'backup/' after data to use backup data
 
 centre_cdl
 ```
@@ -118,7 +122,7 @@ We'll talk about other plotting options such as using the packages `ggplot2` and
 
 ### Reclass to named CDL classes
 
-Right now we are viewing the raw numeric codes of the CDL. These codes mean something: the crop land cover class. We can tell `terra` what these codes mean so that it will show the land cover class names rather than the raw values. The information for these land cover values (along with their colors) are stored in the color table in `data/cdl_colormap.csv`.
+Right now we are viewing the raw numeric codes of the CDL. These codes mean something: the crop land cover class. We can tell `terra` what these codes mean so that it will show the land cover class names rather than the raw values. The information for these land cover values (along with their colors) are stored in the color table in _data/cdl_colormap.csv_.
 
 ```{r load_coltab}
 cdl_colormap <- read.csv("data/cdl_colormap.csv")   # read in the table
@@ -218,7 +222,7 @@ writeRaster(centre_floral_sp, "data/centre_county_springfloral_2021.tif", overwr
 
 1. Use beeshiny to download the CDL raster for another county in the continental US for any year you want.
 
-2. Move the CDL raster for Centre County to the `/data` folder in your ecospatial-workshop directory.
+2. Move the CDL raster for Centre County to the _/data_ folder in your ecospatial-workshop directory.
 
 3. Read the raster into R as a terra `SpatRaster` using `rast()`.
 
@@ -334,14 +338,6 @@ st_write(centre_sites_1000m, "data/centre_sites_buffer_1000m.shp", delete_layer 
 
 2. Compare the CDL values from beeshiny for the centre county sites to the values you produced using the extract function above. Values should be similar but not exacly the same because beeshiny uses exactextractr (`?exact_extract`) instead of the `terra::extract` function. 
 
-# Working with climate data
+## Accessibility
 
-```{r}
-
-```
-
-# Bringing it all together
-```{r}
-
-```
-
+If you're following along in the workshop, use this opportunity to give us your **feedback on accessibility**!
