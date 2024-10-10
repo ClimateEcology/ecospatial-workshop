@@ -3,6 +3,8 @@
 
 # EcoSpatial Summit Workshop
 
+## Install R and RStudio
+
 In preparation for the EcoSpatial Summit Workshop, please download the
 following programs:
 
@@ -10,34 +12,31 @@ following programs:
 
 - [RStudio](https://posit.co/download/rstudio-desktop/)
 
-## Load packages
+## Download this repository
 
-There are a number of packages in R that are helpful in working with
-spatial data. For this workshop we will be using `sf` and `terra`. For
-data wrangling and visualizations we will use `dplyr`, `ggplot2` and
-`tidyterra`.
+To download the contents of this repository, click on the green “\<\>
+Code” button and select “Download ZIP”. Unzip the downloaded zip file
+and save the folder inside.
 
-| Name | Description | Link |
-|:---|:---|:---|
-| `dplyr` | Package that provides a ‘grammar’ of data manipulation in `R` | <https://dplyr.tidyverse.org/> |
-| `ggplot2` | Package that provides a system for declaratively creating graphics | <https://ggplot2.tidyverse.org/> |
-| `sf` | Package for manipulating 2-D geographic vector data | <https://r-spatial.github.io/sf/> |
-| `terra` | Package for spatial data analysis | <https://rspatial.github.io/terra/> |
-| `tidyterra` | Package for integrating objects from `terra` with the `dplyr` and `ggplot2` packages | <https://dieghernan.github.io/tidyterra/> |
+<figure>
+<img src="README_files/figure-gfm/downloadcode.png?raw=true"
+alt="Download code" />
+<figcaption aria-hidden="true">Download code</figcaption>
+</figure>
 
-Unhash (remove the preceding `#`) and use install.packages for any
-packages your may not already have installed
+## Install packages
+
+With R and RStudio installed, open the file
+`ecospatial-workshops.Rproj`. This starts RStudio. Within the console
+window in the lower left, run the following lines to install the R
+packages needed for this workshop.
 
 ``` r
-# install.packages("dplyr", dependencies = TRUE)
-# install.packages("ggplot2", dependencies = TRUE)
-# install.packages("sf", dependencies = TRUE)
-# install.packages("terra", dependencies = TRUE)
-# install.packages("tidyterra", dependencies = TRUE)
-
-library(dplyr)
-library(ggplot2)
-library(sf)
-library(terra)
-library(tidyterra)
+install.packages("dplyr", dependencies = TRUE)
+install.packages("ggplot2", dependencies = TRUE)
+install.packages("sf", dependencies = TRUE)
+install.packages("terra", dependencies = TRUE)
+install.packages("tidyterra", dependencies = TRUE)
+install.packages("SPEI", dependencies = TRUE)
+install.packages("tidyr", dependencies = TRUE)
 ```
