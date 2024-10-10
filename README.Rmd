@@ -25,7 +25,7 @@ In preparation for the EcoSpatial Summit Workshop, please download the following
 
 ## Download this repository
 
-To download the contents of this repository, click on the green "<> Code" button and select "Download ZIP". Unzip the downloaded zip file and save the folder to your computer.
+To download the contents of this repository, click on the green **<> Code** button and select **Download ZIP**. Unzip the downloaded zip file and save the folder to your computer.
 
 ![](README_files/figure/downloadcode.png?raw=true){width="50%"}
 

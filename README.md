@@ -14,8 +14,8 @@ following programs:
 
 ## Download this repository
 
-To download the contents of this repository, click on the green “\<\>
-Code” button and select “Download ZIP”. Unzip the downloaded zip file
+To download the contents of this repository, click on the green **\<\>
+Code** button and select **Download ZIP**. Unzip the downloaded zip file
 and save the folder to your computer.
 
 <img src="README_files/figure/downloadcode.png?raw=true"
