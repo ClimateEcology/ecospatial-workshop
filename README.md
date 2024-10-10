@@ -16,16 +16,17 @@ following programs:
 
 To download the contents of this repository, click on the green “\<\>
 Code” button and select “Download ZIP”. Unzip the downloaded zip file
-and save the folder inside.
+and save the folder to your computer.
 
-![](README_files/figure/downloadcode.png?raw=true)
+<img src="README_files/figure/downloadcode.png?raw=true"
+style="width:50.0%" />
 
 ## Install packages
 
-With R and RStudio installed, open the file
-`ecospatial-workshops.Rproj`. This starts RStudio. Within the console
-window in the lower left, run the following lines to install the R
-packages needed for this workshop.
+With R and RStudio installed, open the file `ecospatial-workshops.Rproj`
+in the downloaded folder. This starts RStudio. Within the console window
+in the lower left, run the following lines to install the R packages
+needed for this workshop.
 
 ``` r
 install.packages("dplyr", dependencies = TRUE)
