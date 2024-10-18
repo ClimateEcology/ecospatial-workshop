@@ -76,7 +76,7 @@ library(tidyterra)
 
 ## About yourself and use cases
 
-If you're following along in the workshop, use this opportunity to give us your **feedback on yourself and your common use cases**!
+If you're following along in the workshop, use this opportunity to give us your [**feedback on yourself**] (https://forms.office.com/r/w3xcsXzQpq) [**and your common use cases**](https://forms.office.com/r/2jMEiYha1a)!
 
 # Working with raster data in R
 
@@ -340,4 +340,4 @@ st_write(centre_sites_1000m, "data/centre_sites_buffer_1000m.shp", delete_layer 
 
 ## Accessibility
 
-If you're following along in the workshop, use this opportunity to give us your **feedback on accessibility**!
+If you're following along in the workshop, use this opportunity to give us your [**feedback on usability**](https://forms.office.com/r/Zfjf8wvznD) and [**data availability**] (https://forms.office.com/r/CnpgRcRwq9)!
