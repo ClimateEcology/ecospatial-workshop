@@ -1,6 +1,6 @@
 ---
-title: "EcoSpatial Workshop"
-author: "Heather Grab, Kevin Li, Sarah Goslee"
+title: "EcoSpatial Workshop: Working with GIS data"
+author: "Heather Grab, Kevin Li"
 date: "2024-10-03"
 output: 
   html_document:
@@ -76,7 +76,7 @@ library(tidyterra)
 
 ## About yourself and use cases
 
-If you're following along in the workshop, use this opportunity to give us your [**feedback on yourself**] (https://forms.office.com/r/w3xcsXzQpq) [**and your common use cases**](https://forms.office.com/r/2jMEiYha1a)!
+If you're interested in beeshiny, please help us make it better by [**telling us a little about yourself**](https://forms.office.com/r/w3xcsXzQpq) and [**your common use cases**](https://forms.office.com/r/2jMEiYha1a)!
 
 # Working with raster data in R
 
@@ -338,6 +338,6 @@ st_write(centre_sites_1000m, "data/centre_sites_buffer_1000m.shp", delete_layer 
 
 2. Compare the CDL values from beeshiny for the centre county sites to the values you produced using the extract function above. Values should be similar but not exacly the same because beeshiny uses exactextractr (`?exact_extract`) instead of the `terra::extract` function. 
 
-## Accessibility
+## Feedback on usability and data availability
 
-If you're following along in the workshop, use this opportunity to give us your [**feedback on usability**](https://forms.office.com/r/Zfjf8wvznD) and [**data availability**] (https://forms.office.com/r/CnpgRcRwq9)!
+If you're interested in beeshiny, please give us your [**feedback on usability**](https://forms.office.com/r/Zfjf8wvznD) and [**data availability**](https://forms.office.com/r/CnpgRcRwq9)!

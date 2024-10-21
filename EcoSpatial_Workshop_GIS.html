@@ -9,11 +9,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
-<meta name="author" content="Heather Grab, Kevin Li, Sarah Goslee" />
+<meta name="author" content="Heather Grab, Kevin Li" />
 
 <meta name="date" content="2024-10-03" />
 
-<title>EcoSpatial Workshop</title>
+<title>EcoSpatial Workshop: Working with GIS data</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -1567,8 +1567,9 @@ border-radius: 0px;
 
 
 
-<h1 class="title toc-ignore">EcoSpatial Workshop</h1>
-<h4 class="author">Heather Grab, Kevin Li, Sarah Goslee</h4>
+<h1 class="title toc-ignore">EcoSpatial Workshop: Working with GIS
+data</h1>
+<h4 class="author">Heather Grab, Kevin Li</h4>
 <h4 class="date">2024-10-03</h4>
 
 </div>
@@ -1692,9 +1693,9 @@ library(tidyterra)</code></pre>
 <div id="about-yourself-and-use-cases" class="section level2" number="0.4">
 <h2><span class="header-section-number">0.4</span> About yourself and
 use cases</h2>
-<p>If you’re following along in the workshop, use this opportunity to
-give us your <strong>feedback on yourself and your common use
-cases</strong>!</p>
+<p>If you’re interested in beeshiny, please help us make it better by <a href="https://forms.office.com/r/w3xcsXzQpq"><strong>telling us a little
+about yourself</strong></a> and <a href="https://forms.office.com/r/2jMEiYha1a"><strong>your common use
+cases</strong></a>!</p>
 </div>
 </div>
 <div id="working-with-raster-data-in-r" class="section level1" number="1">
@@ -2487,10 +2488,12 @@ shapefiles</h2>
 <p>we can write out vector data to shapefiles using
 <code>st_write()</code></p>
 <pre class="r"><code>st_write(centre_sites, &quot;data/centre_sites.shp&quot;, delete_layer = TRUE)
+#&gt; Deleting layer `centre_sites&#39; using driver `ESRI Shapefile&#39;
 #&gt; Writing layer `centre_sites&#39; to data source 
 #&gt;   `data/centre_sites.shp&#39; using driver `ESRI Shapefile&#39;
 #&gt; Writing 8 features with 1 fields and geometry type Point.
 st_write(centre_sites_1000m, &quot;data/centre_sites_buffer_1000m.shp&quot;, delete_layer = TRUE)
+#&gt; Deleting layer `centre_sites_buffer_1000m&#39; using driver `ESRI Shapefile&#39;
 #&gt; Writing layer `centre_sites_buffer_1000m&#39; to data source 
 #&gt;   `data/centre_sites_buffer_1000m.shp&#39; using driver `ESRI Shapefile&#39;
 #&gt; Writing 8 features with 1 fields and geometry type Polygon.</code></pre>
@@ -2509,10 +2512,12 @@ exactextractr (<code>?exact_extract</code>) instead of the
 <code>terra::extract</code> function.</p></li>
 </ol>
 </div>
-<div id="accessibility" class="section level2" number="2.7">
-<h2><span class="header-section-number">2.7</span> Accessibility</h2>
-<p>If you’re following along in the workshop, use this opportunity to
-give us your <strong>feedback on accessibility</strong>!</p>
+<div id="feedback-on-usability-and-data-availability" class="section level2" number="2.7">
+<h2><span class="header-section-number">2.7</span> Feedback on usability
+and data availability</h2>
+<p>If you’re interested in beeshiny, please give us your <a href="https://forms.office.com/r/Zfjf8wvznD"><strong>feedback on
+usability</strong></a> and <a href="https://forms.office.com/r/CnpgRcRwq9"><strong>data
+availability</strong></a>!</p>
 </div>
 </div>
 

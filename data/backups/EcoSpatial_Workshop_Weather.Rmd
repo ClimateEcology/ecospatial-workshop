@@ -27,10 +27,11 @@ This tutorial will demonstrate:
 
 This tutorial uses the `tidyr`, `SPEI`, and `ggplot2` packages, and requires `sp` and `raster` as dependencies.
 
-```{r packages}
+```{r packages, message = FALSE}
 
     library(ggplot2)
     library(SPEI)
+    library(tidyr)
 
 ```
 
@@ -357,7 +358,8 @@ The file _abq.ghcn.RDS_ contains daily weather data for the Albuquerque, NM airp
   - Calculate the BIOCLIM variables for the longer Albuquerque time series. There is no help file, but you can use 
     `args(bioclim)` to see the function arguments. Pay attention to the column names!
 
-## Data availability feedback
+## Feedback on usability and data availability
 
-If you're following along in the workshop, use this opportunity to give us your **feedback on data availability**!
-    
+If you're interested in beeshiny, please give us your [**feedback on usability**](https://forms.office.com/r/Zfjf8wvznD) and [**data availability**](https://forms.office.com/r/CnpgRcRwq9)!
+
+You can also help us by [**telling us a little about yourself**](https://forms.office.com/r/w3xcsXzQpq) and [**your common use cases**](https://forms.office.com/r/2jMEiYha1a).

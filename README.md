@@ -1,12 +1,28 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# EcoSpatial Summit Workshop
+# Introduction to the **beeshiny** data app
+
+This is repository holds the materials needed to recreate the workshop
+introducing [**beeshiny**](https://beesuite.psu.edu/beeshiny/) at the
+[EcoSpatial Summit](https://ecospatialsummit.com/), held on Oct. 10-11,
+2024. Beeshiny is a web-based tool that makes it easier to access the
+land use, habitat quality, weather and climate data currently featured
+in [Beescape](https://beescape.psu.edu/), another tool developed by Penn
+State University to help beekeepers, gardeners, urban planners, growers,
+researchers, and land managers assess the quality of their landscapes
+for supporting bees and other pollinators.
+
+The workshop covered topics on how to use R to process GIS layers and
+tabular outputs downloaded from the beehiny app. This includes working
+with raster and vector GIS data and tabular climate data. The
+instructions for these tutorials are included as html files within the
+main repository directory.
 
 ## Install R and RStudio
 
-In preparation for the EcoSpatial Summit Workshop, please download the
-following programs:
+To run the content of this tutorial, please download the following
+programs:
 
 - [R](https://cran.rstudio.com/)
 
@@ -20,6 +36,13 @@ and save the folder to your computer.
 
 <img src="README_files/figure/downloadcode.png?raw=true"
 style="width:50.0%" />
+
+## Tutorial instructions
+
+Within the ‘*ecospatial-workshop*’ folder, tutorial instructions for
+working with GIS data and weather data are found in the files
+‘*EcoSpatial_Workshop_GIS.html*’ and
+‘*EcoSpatial_Workshop_Weather.html*’, respectively.
 
 ## Install packages
 
