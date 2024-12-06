@@ -16,9 +16,11 @@ To run the content of this tutorial, please download the following programs:
 
 * [RStudio](https://posit.co/download/rstudio-desktop/)
 
-## Download this repository
+## Download the workshop repository
 
-To download the contents of this repository, click on the green **<> Code** button and select **Download ZIP**. Unzip the downloaded zip file and save the folder to your computer.
+The repository with the workshop materials is located here: https://github.com/ClimateEcology/ecospatial-workshop
+
+To download the contents of the repository, click on the green **<> Code** button and select **Download ZIP**. Unzip the downloaded zip file and save the folder to your computer.
 
 ![](README_files/figure/downloadcode.png?raw=true){width="50%"}
 
