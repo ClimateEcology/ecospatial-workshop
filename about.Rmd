@@ -2,4 +2,6 @@
 title: "About This Website"
 ---
 
-More about this website.
+The contents of this workshop were originally presented for the [EcoSpatial Summit](https://ecospatialsummit.com/). That event convened experts and novices to foster knowledge sharing, collaboration, and innovation around applications of the spatial datasets featured in the [Beescape platform](https://beescape.psu.edu/) and beyond to ecosystem services and conservation. Participants attended an interactive workshop introducing [BeeShiny](https://beesuite.psu.edu/beeshiny/) to access Beescape data for research applications. 
+
+This work is supported by the USDA NIFA Data Science for Food and Agricultural Systems Program project 2021-67021-34146.
