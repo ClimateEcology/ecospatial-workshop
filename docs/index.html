@@ -11,7 +11,7 @@
 
 
 
-<title>My Website</title>
+<title>Beescape Workshop</title>
 
 <script src="site_libs/header-attrs-2.29/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -260,22 +260,70 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">My Website</h1>
+<h1 class="title toc-ignore">Beescape Workshop</h1>
 
 </div>
 
 
-<p>Hello, Website!</p>
-<p>For more information about simple R Markdown websites, please read
-the documentation at <a
-href="https://bookdown.org/yihui/rmarkdown/rmarkdown-site.html"
-class="uri">https://bookdown.org/yihui/rmarkdown/rmarkdown-site.html</a>.</p>
-<p>Please also note that simple R Markdown sites are <em>not</em> based
-on <strong>blogdown</strong>. They are probably good for websites with
-only a few Rmd documents. For larger-scale and more sophisticated
-websites (such as blogs), you may want to use <strong>blogdown</strong>
-instead: <a href="https://github.com/rstudio/blogdown"
-class="uri">https://github.com/rstudio/blogdown</a>.</p>
+<div id="introduction-to-the-beeshiny-data-app" class="section level1">
+<h1>Introduction to the <strong>beeshiny</strong> data app</h1>
+<p>This website holds the material needed to recreate the workshop
+introducing <a
+href="https://beesuite.psu.edu/beeshiny/"><strong>beeshiny</strong></a>,
+which was held at the <a href="https://ecospatialsummit.com/">EcoSpatial
+Summit</a> on Oct. 10-11, 2024. Beeshiny is a web-based tool that makes
+it easier to access the land use, habitat quality, weather and climate
+data currently featured in <a
+href="https://beescape.psu.edu/">Beescape</a>, another tool developed by
+Penn State University. Beescape can be used by beekeepers, gardeners,
+urban planners, growers, researchers, and land managers to assess the
+quality of their landscapes for supporting bees and other pollinators.
+Beeshiny is a researcher-focused complement to Beescape.</p>
+<p>The workshop covered topics on how to use R to process GIS layers and
+tabular outputs downloaded from the beehiny app. The instructions for
+these tutorials are included as html files within the main repository
+directory.</p>
+<div id="install-r-and-rstudio" class="section level2">
+<h2>Install R and RStudio</h2>
+<p>To run the content of this tutorial, please download the following
+programs:</p>
+<ul>
+<li><p><a href="https://cran.rstudio.com/">R</a></p></li>
+<li><p><a
+href="https://posit.co/download/rstudio-desktop/">RStudio</a></p></li>
+</ul>
+</div>
+<div id="download-this-repository" class="section level2">
+<h2>Download this repository</h2>
+<p>To download the contents of this repository, click on the green
+<strong>&lt;&gt; Code</strong> button and select <strong>Download
+ZIP</strong>. Unzip the downloaded zip file and save the folder to your
+computer.</p>
+<p><img src="README_files/figure/downloadcode.png?raw=true"
+style="width:50.0%" /></p>
+</div>
+<div id="tutorial-instructions" class="section level2">
+<h2>Tutorial instructions</h2>
+<p>Within the ‘<em>ecospatial-workshop</em>’ folder, tutorial
+instructions for working with GIS data and tabular weather data are
+found in the files ‘<em>EcoSpatial_Workshop_GIS.html</em>’ and
+‘<em>EcoSpatial_Workshop_Weather.html</em>’, respectively.</p>
+</div>
+<div id="install-packages" class="section level2">
+<h2>Install packages</h2>
+<p>With R and RStudio installed, open the file
+‘<em>ecospatial-workshop.Rproj</em>’ in the downloaded folder. This
+starts RStudio. Within the console window in the lower left, run the
+following lines to install the R packages needed for this workshop.</p>
+<pre class="r"><code>install.packages(&quot;dplyr&quot;, dependencies = TRUE)
+install.packages(&quot;ggplot2&quot;, dependencies = TRUE)
+install.packages(&quot;sf&quot;, dependencies = TRUE)
+install.packages(&quot;terra&quot;, dependencies = TRUE)
+install.packages(&quot;tidyterra&quot;, dependencies = TRUE)
+install.packages(&quot;SPEI&quot;, dependencies = TRUE)
+install.packages(&quot;tidyr&quot;, dependencies = TRUE)</code></pre>
+</div>
+</div>
 
 
 
