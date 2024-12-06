@@ -5,5 +5,9 @@ navbar:
   left:
     - text: "Home"
       href: index.html
+    - text: "Use Beeshiny: GIS"
+      href: EcoSpatial_Workshop_GIS.html
+    - text: "Use Beeshiny: Weather data"
+      href: EcoSpatial_Workshop_Weather.html
     - text: "About"
       href: about.html

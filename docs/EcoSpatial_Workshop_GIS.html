@@ -328,6 +328,12 @@ div.tocify {
   <a href="index.html">Home</a>
 </li>
 <li>
+  <a href="EcoSpatial_Workshop_GIS.html">Use Beeshiny: GIS</a>
+</li>
+<li>
+  <a href="EcoSpatial_Workshop_Weather.html">Use Beeshiny: Weather data</a>
+</li>
+<li>
   <a href="about.html">About</a>
 </li>
       </ul>
@@ -843,7 +849,7 @@ similar to the results that beeshiny provides, we can use the
 <code>extract()</code> function from terra. First providing the raster
 we want to extract values from, then the sf object that defines the
 zones in which the raster will the summarized.</p>
-<pre class="r"><code>centre_table_1000m &lt;- extract(centre_cdl, centre_sites_1000m, fun=&quot;table&quot;, ID=F)
+<pre class="r"><code>centre_table_1000m &lt;- terra::extract(centre_cdl, centre_sites_1000m, fun=&quot;table&quot;, ID=F)
 centre_table_1000m
 #&gt;   Background Corn Cotton Rice Sorghum Soybeans Sunflower Peanuts Tobacco Sweet Corn
 #&gt; 1          0 1240      0    0      12     1021         0       0       0          0

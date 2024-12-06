@@ -308,7 +308,7 @@ ggplot()+
 
 If we wanted to assess land cover around a site in a way that is similar to the results that beeshiny provides, we can use the `extract()` function from terra. First providing the raster we want to extract values from, then the sf object that defines the zones in which the raster will the summarized. 
 ```{r extract}
-centre_table_1000m <- extract(centre_cdl, centre_sites_1000m, fun="table", ID=F)
+centre_table_1000m <- terra::extract(centre_cdl, centre_sites_1000m, fun="table", ID=F)
 centre_table_1000m
 ```
 
