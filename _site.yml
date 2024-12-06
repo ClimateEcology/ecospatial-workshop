@@ -1,7 +1,7 @@
 name: "EcoSpatial-workshop"
 output_dir: docs
 navbar:
-  title: "My Website"
+  title: "Beeshiny Workshop"
   left:
     - text: "Home"
       href: index.html
