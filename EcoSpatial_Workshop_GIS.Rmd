@@ -33,7 +33,7 @@ beeshiny allows users to extract:
 
 * **raster:** A form of geographic data that represents the landscape as a grid of cells. Grid values can be continuous values, signifying things like elevation, temperature, or spectral information (e.g. color) in a satellite image; or categorical values, signifying thematic classes like land cover.
 * **vector:** Another form of geographic data that represents specific features on the landscape composed of discrete geometric locations that consist of x and y values. These can be points, lines, or polygons.
-* **Cropland Data Layer (CDL):** A set of raster datasets produced by the USDA Nationa Agricultural Statistics (NASS) Service and Agricultural Research Service (ARS) that represents annual crop-specific land cover produced from satellite imagery and ground reference data.
+* **Cropland Data Layer (CDL):** A set of raster datasets produced by the USDA National Agricultural Statistics (NASS) Service and Agricultural Research Service (ARS) that represents annual crop-specific land cover produced from satellite imagery and ground reference data.
 
 ## Data Details
 
